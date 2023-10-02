@@ -4,14 +4,14 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 
-import AppRouter from 'AppRouter';
+import Router from 'router';
 import { Layout } from 'components';
 
 
 function App() {
   return (
       <Layout>
-        <AppRouter />
+        <Router />
       </Layout>
   );
 }
