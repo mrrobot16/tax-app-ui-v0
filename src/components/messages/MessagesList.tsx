@@ -1,10 +1,10 @@
 import { ChatContainerStyling } from 'containers/Chat/styles';
 import { UserIcon, BotIcon } from 'assets/icons';
-import { MessageListProps, Message } from 'types';
+import { MessagesListProps, Message } from 'types';
 
 const { classNames, styles } = ChatContainerStyling;
 
-export function MessageList({messages, callback, loading}: MessageListProps) {
+export function MessagesList({messages, callback, loading}: MessagesListProps) {
     return (
       <div className="MessageList" style={styles.messageList}>
           {
@@ -39,3 +39,4 @@ export function MessageList({messages, callback, loading}: MessageListProps) {
       </div>
     );
   }
+export default MessagesList;

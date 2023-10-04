@@ -3,7 +3,7 @@ export type Message = {
     type: string;
 }
 
-export type MessageListProps = {
+export type MessagesListProps = {
     loading: boolean;
     messages: Message[];
     callback: () => unknown | void;

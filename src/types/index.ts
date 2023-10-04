@@ -1,2 +1,2 @@
 export * from 'types/assets';
-export * from 'types/message';
+export * from 'types/messages';
