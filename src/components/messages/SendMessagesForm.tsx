@@ -9,23 +9,21 @@ const { styles } = MessagesComponentsStyling;
 export function SendMessage({sendMessage, loading }: SendMessagesProps) {
   const [message, setMessage] = useState<string>('');
 
-  const onChange = (event: ChangeEvent) => {
-    console.log('onChange event', event);
-    // setMessage(event.target.value);
+  const onChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    // console.log('onChange event', event.target.value);
+    setMessage(event.target.value);
   };
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log('onSubmit event', event);
-    // sendMessage('');
+    sendMessage('');
   };
 
-  const handleEnter = (event: KeyboardEvent) => {
-    console.log('handleEnter event', event);
-
-    if (event.key === 'Enter' && message) {
-      onSubmit(event as unknown as FormEvent<HTMLFormElement>);
-    } else if (event.key === 'Enter') {
+  const handleEnter = (event: KeyboardEvent | FormEvent) => {
+    if ((event as KeyboardEvent).key === 'Enter' && message) {
+      onSubmit(event as FormEvent<HTMLFormElement>);
+    } else if ((event as KeyboardEvent).key === 'Enter') {
       event.preventDefault();
     }
   };
