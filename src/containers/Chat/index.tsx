@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
 import { ChatContainerStyling } from 'containers/Chat/styles';
-import { MessageList } from 'components';
+import { MessagesList } from 'components';
 import { MESSAGES_LIST } from 'utils/constants';
 import { UserIcon, BotIcon } from 'assets/icons';
-import { MessageListProps, Message } from 'types';
+import { MessagesListProps, Message } from 'types';
 
 const { classNames, styles } = ChatContainerStyling;
 
@@ -22,7 +22,7 @@ export function Chat() {
       <h1 className={classNames.title}>Chat with Tax Copilot</h1>
       <main style={styles.main}>
         <div className="Cloud" style={styles.cloud}>
-            <MessageList messages={messageList} callback={messageListCallback} loading={loading}/>
+            <MessagesList messages={messageList} callback={messageListCallback} loading={loading}/>
         </div>
       </main>
     </div>

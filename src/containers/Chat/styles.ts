@@ -21,38 +21,7 @@ const styles = {
       justifyContent: 'center',
       alignItems: 'center',
     },
-    messageList: {
-      width: '100%',
-      height: '100%',
-      OverflowY: 'scroll',
-      borderRadius: '0.5rem',
-    },
-    messageItem: {
-      display: 'flex',
-      padding: '1.5rem',
-    },
-    apiMessage: {
-      background: '#f9fafb',
-      color: '#000',
-      borderRadius: '0.5rem',
-    },
-    userMessage: {
-      // display: 'flex',
-      // padding: '1.5rem',
-    },
-    userMessageLoading: {
-      // display: 'flex',
-      // padding: '1.5rem',
-    },
-    messageInfo: {
-      lineHeight: 1.75,
-    },
-    icons: {
-      height: '100%',
-      borderRadius: '0.1rem',
-      marginRight: '1rem',
-    },
-  };
+};
 
 export const ChatContainerStyling = {
     classNames,
