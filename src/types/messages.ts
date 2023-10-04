@@ -11,5 +11,5 @@ export type MessagesListProps = {
 
 export type SendMessagesProps = {
     sendMessage: (message: string) => unknown | void;
-    message: string;
+    loading: boolean;
 };
