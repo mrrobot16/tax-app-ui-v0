@@ -5,13 +5,13 @@ const classNames = {
 
 const styles = {
     main: {
-      display: 'flex',
-      FlexDirection: 'column',
-      justifyContent: 'space-between',
-      alignItems: 'center',
+      // display: 'flex',
+      // FlexDirection: 'column',
+      // justifyContent: 'space-between',
+      // alignItems: 'center',
       padding: '1rem',
     },
-    cloud: {
+    messageListContainer: {
       width: '75vw',
       height: '65vh',
       background: '#ffffff',
@@ -20,6 +20,14 @@ const styles = {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
+    },
+    sendMessageContainer: {
+      position: 'relative',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: '1rem 0',
+      flexDirection: 'column',
     },
 };
 

@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { CSSProperties, useState } from 'react';
 
 import { ChatContainerStyling } from 'containers/Chat/styles';
-import { MessagesList } from 'components';
+import { MessagesList, SendMessagesForm } from 'components';
 import { MESSAGES_LIST } from 'utils/constants';
 import { UserIcon, BotIcon } from 'assets/icons';
 import { MessagesListProps, Message } from 'types';
@@ -21,8 +21,11 @@ export function Chat() {
     <div className={classNames.container}>
       <h1 className={classNames.title}>Chat with Tax Copilot</h1>
       <main style={styles.main}>
-        <div className="Cloud" style={styles.cloud}>
+        <div className="MessageListContainer" style={styles.messageListContainer}>
             <MessagesList messages={messageList} callback={messageListCallback} loading={loading}/>
+        </div>
+        <div className="SendMessageContainer" style={styles.sendMessageContainer as CSSProperties}>
+            <SendMessagesForm loading={loading} sendMessage={()=>{}}/>
         </div>
       </main>
     </div>
