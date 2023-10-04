@@ -8,3 +8,8 @@ export type MessagesListProps = {
     messages: Message[];
     callback: () => unknown | void;
 }
+
+export type SendMessagesProps = {
+    sendMessage: (message: string) => unknown | void;
+    message: string;
+};
