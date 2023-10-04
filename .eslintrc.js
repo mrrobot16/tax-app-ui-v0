@@ -201,7 +201,8 @@ module.exports = {
     'no-undef-init': 0, // disallow use of undeclared variables unless mentioned in a /*global */ block
     'no-undef': 2, // disallow use of undefined variable
     'no-undefined': 0, // disallow declaration of variables that are not used in the code
-    'no-unused-vars': [2, { vars: 'all', args: 'after-used', ignoreRestSiblings: true }], // disallow use of variables before they are defined // Note: you must disable the base rule as it can report incorrect errors // Reference: https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/no-use-before-define.md
+    // 'no-unused-vars': [2, { vars: 'all', args: 'after-used', ignoreRestSiblings: true }], // disallow use of variables before they are defined // Note: you must disable the base rule as it can report incorrect errors // Reference: https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/no-use-before-define.md
+    'no-unused-vars': ['error', { 'vars': 'all', 'args': 'after-used', 'ignoreRestSiblings': false }],
     'no-use-before-define': [
       2,
       { functions: false, classes: true, allowNamedExports: true },
