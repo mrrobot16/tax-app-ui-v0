@@ -1,12 +1,14 @@
+import { CSSProperties } from 'react';
 import { MessagesComponentsStyling } from 'components/messages/styles';
 import { UserIcon, BotIcon } from 'assets/icons';
 import { MessagesListProps, Message } from 'types';
+
 
 const { styles } = MessagesComponentsStyling;
 
 export function MessagesList({messages, callback, loading}: MessagesListProps) {
     return (
-      <div data-id="MessageList" style={{...styles.messageList, overflowY: 'scroll'}}>
+      <div data-id="MessageList" style={styles.messageList as CSSProperties}>
           {
             messages.map((message: Message, index: number) => {
               const isLoading = loading && index === messages.length - 1;
@@ -42,5 +44,6 @@ export function MessagesList({messages, callback, loading}: MessagesListProps) {
           }
       </div>
     );
-  }
+}
+
 export default MessagesList;
