@@ -6,65 +6,64 @@ import { SendIcon } from 'assets/icons';
 
 const { styles } = MessagesComponentsStyling;
 
-export function SendMessage({sendMessage, loading }: SendMessagesProps) {
+export function SendMessage({sendMessage, callback, loading }: SendMessagesProps) {
   const [message, setMessage] = useState<string>('');
 
   const onChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    // console.log('onChange event', event.target.value);
     setMessage(event.target.value);
   };
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('onSubmit event', event);
-    sendMessage('');
+
+    sendMessage({text: message, type: 'user'});
   };
 
   const handleEnter = (event: KeyboardEvent | FormEvent) => {
     if ((event as KeyboardEvent).key === 'Enter' && message) {
       onSubmit(event as FormEvent<HTMLFormElement>);
+      setMessage('');
     } else if ((event as KeyboardEvent).key === 'Enter') {
       event.preventDefault();
     }
   };
 
-    return (
-      <div className="SendMessageForm" style={styles.sendMessageForm as CSSProperties}>
-        <form onSubmit={onSubmit}>
-          <textarea
-            disabled={loading}
-            onKeyDown={handleEnter}
-            // ref={textAreaRef}
-            rows={1}
-            maxLength={512}
-            id="sendMessageInput"
-            placeholder={
-              loading
-                ? 'Waiting for response...'
-                : 'What tax question do you have?'
-            }
-            value={message}
-            onChange={onChange}
-            style={styles.sendMessageInput as CSSProperties}
-           />
-          <button
-            type="submit"
-            disabled={loading}
-            style={styles.sendMessageButton as CSSProperties}
-          >
-            {
-              loading ? (
-                <div style={styles.loadingWheel as CSSProperties}>
-                  <LoadingDots color="#000" />
-                </div>
-              ) : (
-                <SendIcon />
-              )
-            }
-          </button>
+  return (
+    <div className="SendMessageForm" style={styles.sendMessageForm as CSSProperties}>
+      <form onSubmit={onSubmit}>
+        <textarea
+          disabled={loading}
+          onKeyDown={handleEnter}
+          rows={1}
+          maxLength={512}
+          id="sendMessageInput"
+          placeholder={
+            loading
+              ? 'Waiting for response...'
+              : 'What tax question do you have?'
+          }
+          value={message}
+          onChange={onChange}
+          style={styles.sendMessageInput as CSSProperties}
+          />
+        <button
+          type="submit"
+          disabled={loading}
+          style={styles.sendMessageButton as CSSProperties}
+        >
+          {
+            loading ? (
+              <div style={styles.loadingWheel as CSSProperties}>
+                <LoadingDots color="#000" />
+              </div>
+            ) : (
+              <SendIcon />
+            )
+          }
+        </button>
 
-        </form>
-      </div>
-    );
-  }
+      </form>
+    </div>
+  );
+}
 export default SendMessage;
