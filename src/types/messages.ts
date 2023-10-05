@@ -1,16 +1,15 @@
 export type Message = {
-    info: string;
+    text: string;
     type: string;
 }
 
 export type MessagesListProps = {
     loading: boolean;
     messages: Message[];
-    callback: () => unknown | void;
 }
 
 export type SendMessagesProps = {
     loading: boolean;
-    sendMessage: (message: string) => unknown | void;
-    callback: () => unknown | void;
+    sendMessage: (message: Message) => void;
+    callback: (message: Message) => void;
 };
