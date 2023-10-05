@@ -6,7 +6,7 @@ import { MessagesListProps, Message } from 'types';
 
 const { styles } = MessagesComponentsStyling;
 
-export function MessagesList({messages, callback, loading}: MessagesListProps) {
+export function MessagesList({messages, loading}: MessagesListProps) {
   return (
     <div data-id="MessageList" style={styles.messageList as CSSProperties}>
         {

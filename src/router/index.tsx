@@ -6,13 +6,13 @@ import {
 import { Chat } from 'containers';
 
 export const routes = [
-    {
-        path: '/',
-        element: <Chat />,
-    },
-    {
-      path: '/chat',
-      element: <Chat />,
+  {
+    path: '/',
+    element: <Chat />,
+  },
+  {
+    path: '/chat',
+    element: <Chat />,
   },
 ];
 

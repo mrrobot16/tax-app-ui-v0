@@ -17,14 +17,13 @@ export function SendMessage({sendMessage, callback, loading }: SendMessagesProps
     event.preventDefault();
 
     sendMessage({text: message, type: 'user'});
+    setMessage('');
   };
 
   const handleEnter = (event: KeyboardEvent | FormEvent) => {
     if ((event as KeyboardEvent).key === 'Enter' && message) {
       onSubmit(event as FormEvent<HTMLFormElement>);
       setMessage('');
-    } else if ((event as KeyboardEvent).key === 'Enter') {
-      event.preventDefault();
     }
   };
 
@@ -48,7 +47,7 @@ export function SendMessage({sendMessage, callback, loading }: SendMessagesProps
           />
         <button
           type="submit"
-          disabled={loading}
+          disabled={loading || !message}
           style={styles.sendMessageButton as CSSProperties}
         >
           {
