@@ -25,7 +25,7 @@ export function Chat() {
             <MessagesList messages={messageList} callback={messageListCallback} loading={loading}/>
         </div>
         <div className="SendMessageContainer" style={styles.sendMessageContainer as CSSProperties}>
-            <SendMessagesForm loading={loading} sendMessage={()=>{}}/>
+            <SendMessagesForm loading={loading} sendMessage={()=>{}} callback={()=>{}}/>
         </div>
       </main>
     </div>

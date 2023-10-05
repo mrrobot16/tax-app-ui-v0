@@ -10,6 +10,7 @@ export type MessagesListProps = {
 }
 
 export type SendMessagesProps = {
-    sendMessage: (message: string) => unknown | void;
     loading: boolean;
+    sendMessage: (message: string) => unknown | void;
+    callback: () => unknown | void;
 };
