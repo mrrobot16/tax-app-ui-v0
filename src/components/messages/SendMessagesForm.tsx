@@ -39,7 +39,7 @@ export function SendMessage({sendMessage, callback, loading }: SendMessagesProps
           placeholder={
             loading
               ? 'Waiting for response...'
-              : 'What tax question do you have?'
+              : 'Type your tax question'
           }
           value={message}
           onChange={onChange}
