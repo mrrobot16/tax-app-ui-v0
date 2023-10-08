@@ -8,14 +8,14 @@
       "type": "image/x-icon"
     },
     {
-      "src": "irs-logo192.png",
+      "src": "logo192.png",
       "type": "image/png",
-      "sizes": "426x366"
+      "sizes": "192x192"
     },
     {
-      "src": "irs-logo512.png",
+      "src": "logo512.png",
       "type": "image/png",
-      "sizes": "1068x926"
+      "sizes": "512x512"
     }
   ],
   "start_url": ".",
