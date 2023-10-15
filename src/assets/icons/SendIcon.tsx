@@ -2,7 +2,7 @@ const styles = {
     transform: 'rotate(90deg)',
     width: '1.2em',
     height: '1.2em',
-    fill: 'currentColor',
+    // fill: 'currentColor',
 };
 
 export function SendIcon() {
