@@ -6,7 +6,7 @@ import { SendIcon } from 'assets/icons';
 
 const { styles } = MessagesComponentsStyling;
 
-export function SendMessage({sendMessage, callback, loading }: SendMessagesProps) {
+export function SendMessage({sendMessage, loading }: SendMessagesProps) {
   const [message, setMessage] = useState<string>('');
 
   const onChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -16,7 +16,7 @@ export function SendMessage({sendMessage, callback, loading }: SendMessagesProps
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    sendMessage({text: message, type: 'user'});
+    sendMessage({content: message, role: 'user'});
     setMessage('');
   };
 
