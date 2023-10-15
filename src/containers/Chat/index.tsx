@@ -1,54 +1,110 @@
-import { CSSProperties, useState } from 'react';
+
+import { CSSProperties, useState, useEffect } from 'react';
 
 import { ChatContainerStyling } from 'containers/Chat/styles';
 import { MessagesList, SendMessagesForm, ErrorMessage } from 'components';
-import { MESSAGES_LIST } from 'utils/constants';
-import { UserIcon, BotIcon } from 'assets/icons';
-import { MessagesListProps, Message } from 'types';
-import { chat } from 'services';
+import { MESSAGES_LIST, USER_ID, CONVERSATION_ID } from 'utils/constants';
+import { Message } from 'types';
+import { newConversationWithOpenai, newConversationMessage } from 'services';
+import {
+  setConversationIdLocalStorage,
+  getConversationIdLocalStorage,
+  getUserIdLocalStorage,
+  setUserIdLocalStorage,
+} from 'utils/storage';
 
 const { classNames, styles } = ChatContainerStyling;
 
 export function Chat() {
   const [messageList, setMessageList] = useState<Message[]>(MESSAGES_LIST);
+  const [userId, setUserId] = useState<string | null>(USER_ID);
+  const [conversationId, setConversationId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const messageListCallback = () => {};
+
+  // TODO: Need fix this linting issue.
+  /* eslint-disable react-hooks/exhaustive-deps */
+  const checkUser = () => {
+    const user_id = getUserIdLocalStorage();
+
+    if(!user_id) {
+      // NOTE: For now only one user will be created which is hardcoded.
+      setUserIdLocalStorage(USER_ID);
+      setUserId(USER_ID);
+    }
+
+    setUserId(user_id);
+  };
+
+  const checkConversations = () => {
+    const conversation_id = getConversationIdLocalStorage();
+    // NOTE: For now only one conversation will be created which is hardcoded.
+
+    if(!conversation_id) {
+      setConversationIdLocalStorage(CONVERSATION_ID);
+      setConversationId(CONVERSATION_ID);
+
+      return conversationId;
+    }
+
+    setConversationId(conversation_id);
+  };
 
   const componentDidMount = () => {
-    console.log('Here I should fetch either history of messages or do something');
+    checkUser();
+    checkConversations();
   };
 
-  const sendMessageCallback = (response: Message) => {
-    setMessageList((state)=>([
-      ...state,
-      {
-        text: response.text,
-        type: 'api',
-      },
-    ]));
-  };
+  useEffect(componentDidMount, [checkUser, checkConversations]);
 
-  const sendMessageErrorCallback = (error: string) => {
-    setError(error);
-  };
-
-  const sendMessage = async (message: Message) => {
+  const createConversationMessage = async (message: Message) => {
     setLoading(true);
 
-    setMessageList([
-      ...messageList,
-      {
-        text: message.text,
-        type: 'user',
-      },
+    const newMessage = {
+      content: message.content,
+      role: message.role,
+    };
+
+    setMessageList((prevMessageList) => [
+      ...prevMessageList,
+      newMessage,
     ]);
 
-    const response = await chat(message.text, sendMessageCallback, sendMessageErrorCallback);
+    if(!conversationId) {
+      const response = await newConversationWithOpenai(userId, newMessage);
+      const openaiResponse = response?.data.openai_message;
+      const { content, role, conversation_id } = openaiResponse;
+      const assistantMessage = {
+        content,
+        role,
+      };
 
-    setTimeout(() => {
+      setConversationIdLocalStorage(conversation_id);
+      setConversationId(conversation_id);
+
+      setMessageList((prevMessageList) => [
+        ...prevMessageList,
+        assistantMessage,
+      ]);
+
       setLoading(false);
-    }, 1000 * 3);
+    }
+
+    if(conversationId && userId) {
+      const response = await newConversationMessage(userId, conversationId, newMessage);
+      const openaiResponse = response?.data.openai_message;
+      const { content, role, conversation_id } = openaiResponse;
+      const assistantMessage = {
+        content,
+        role,
+      };
+
+      setMessageList((prevMessageList) => [
+        ...prevMessageList,
+        assistantMessage,
+      ]);
+      setLoading(false);
+    }
   };
 
   return (
@@ -59,7 +115,7 @@ export function Chat() {
             <MessagesList messages={messageList} loading={loading}/>
         </div>
         <div className="SendMessageContainer" style={styles.sendMessageContainer as CSSProperties}>
-            <SendMessagesForm loading={loading} sendMessage={sendMessage} callback={sendMessageCallback}/>
+            <SendMessagesForm loading={loading} sendMessage={createConversationMessage} />
         </div>
         { error && <ErrorMessage error={error} /> }
       </main>

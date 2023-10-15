@@ -1,5 +1,1 @@
-import Chat from 'containers/Chat';
-
-export {
-    Chat,
-};
+export * from 'containers/Chat';
