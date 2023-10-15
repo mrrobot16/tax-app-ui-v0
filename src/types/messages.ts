@@ -1,6 +1,6 @@
 export type Message = {
-    text: string;
-    type: string;
+    content: string;
+    role: string;
 }
 
 export type MessagesListProps = {
@@ -11,5 +11,4 @@ export type MessagesListProps = {
 export type SendMessagesProps = {
     loading: boolean;
     sendMessage: (message: Message) => void;
-    callback: (message: Message) => void;
 };
