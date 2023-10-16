@@ -34,7 +34,7 @@ export function SendMessage({sendMessage, loading }: SendMessagesProps) {
           disabled={loading}
           onKeyDown={handleEnter}
           rows={1}
-          maxLength={512}
+          maxLength={5000}
           id="sendMessageInput"
           placeholder={
             loading
