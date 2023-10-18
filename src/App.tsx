@@ -1,8 +1,3 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from 'react-router-dom';
-
 import Router from 'router';
 import { Layout } from 'components';
 
