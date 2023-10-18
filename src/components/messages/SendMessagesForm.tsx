@@ -35,6 +35,7 @@ export function SendMessage({sendMessage, loading }: SendMessagesProps) {
           onKeyDown={handleEnter}
           rows={1}
           maxLength={5000}
+          aria-multiline
           id="sendMessageInput"
           placeholder={
             loading
