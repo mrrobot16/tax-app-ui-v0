@@ -5,14 +5,14 @@ import { MessagesListProps, Message } from 'types';
 
 const { styles } = MessagesComponentsStyling;
 
-export function MessagesList({messages, loading}: MessagesListProps) {
+export function MessagesList({messages, loading, assistantLoadingMessage}: MessagesListProps) {
   return (
     <div data-id="MessageList" style={styles.messageList as CSSProperties}>
         {
           messages.map((message: Message, index: number) => {
             const isLoading = loading && index === messages.length - 1;
             const isApiMessage = message.role === 'assistant';
-
+            const isAssistantLoadingMessage = message.content === assistantLoadingMessage.content;
             const userMessageStyle = {...styles.messageItem, ...styles.userMessage};
             const apiMessageStyle = {...styles.messageItem, ...styles.apiMessage};
             const messageLoadingStyle = {...styles.messageItem, ...styles.userMessageLoading};
@@ -31,7 +31,11 @@ export function MessagesList({messages, loading}: MessagesListProps) {
                       <BotIcon index={index} height={40} width={40} styles={styles.icons}/>
                     ) : null
                   }
-
+                  {/* {
+                    isAssistantLoadingMessage && message.role === 'assistant' ? (
+                      <BotIcon index={index} height={40} width={40} styles={styles.icons}/>
+                    ) : null
+                  } */}
                   <div style={styles.messageInfo}>
 
                       { message.content }
