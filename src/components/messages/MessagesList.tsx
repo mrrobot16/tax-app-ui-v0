@@ -33,9 +33,9 @@ export function MessagesList({messages, loading}: MessagesListProps) {
                   }
 
                   <div style={styles.messageInfo}>
-                    <p>
+
                       { message.content }
-                    </p>
+
                   </div>
                 </div>
             );
