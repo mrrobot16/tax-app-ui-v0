@@ -4,6 +4,7 @@ import MessagesList from 'components/messages/MessagesList';
 import SendMessagesForm from 'components/messages/SendMessagesForm';
 import LoadingDots from 'components/common/LoadingDots';
 import ErrorMessage from 'components/messages/ErrorMessage';
+import Typewriter from 'components/messages/Typewriter';
 
 export {
     Layout,
@@ -12,4 +13,5 @@ export {
     SendMessagesForm,
     LoadingDots,
     ErrorMessage,
+    Typewriter,
 };
