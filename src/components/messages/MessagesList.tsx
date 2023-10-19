@@ -1,5 +1,5 @@
 import { CSSProperties } from 'react';
-import { LoadingDots } from 'components';
+import { LoadingDots, Typewriter } from 'components';
 import { MessagesComponentsStyling } from 'components/messages/styles';
 import { UserIcon, BotIcon } from 'assets/icons';
 import { MessagesListProps, Message } from 'types';
@@ -16,12 +16,11 @@ export function MessagesList(
         {
           messages.map((message: Message, index: number) => {
             const isLoading = loading && index === messages.length - 1;
-            const isApiMessage = message.role === 'assistant';
+            const isAssistantMessage = message.role === 'assistant';
             const userMessageStyle = {...styles.messageItem, ...styles.userMessage};
-            const apiMessageStyle = {...styles.messageItem, ...styles.apiMessage};
+            const assistantMessageStyle = {...styles.messageItem, ...styles.apiMessage};
             const messageLoadingStyle = {...styles.messageItem, ...styles.userMessageLoading};
-
-            const messageStyle = isApiMessage ? apiMessageStyle : isLoading ? messageLoadingStyle : userMessageStyle;
+            const messageStyle = isAssistantMessage ? assistantMessageStyle : isLoading ? messageLoadingStyle : userMessageStyle;
 
             return (
                 <div key={`chatMessage-${index}`} data-id={`chatMessage-${message.role}-${index}`} style={messageStyle}>
@@ -40,7 +39,7 @@ export function MessagesList(
                       isLoading ? (
                         <LoadingDots color="#000" />
                       ) : (
-                        <div dangerouslySetInnerHTML={{ __html: message.content }} />
+                        isAssistantMessage ? <Typewriter content={message.content} delay={1} /> : <div dangerouslySetInnerHTML={{ __html: message.content }} />
                       )
                     }
                   </div>
