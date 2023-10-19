@@ -1,5 +1,19 @@
-export const USER_ID = 'cefece6f-3a77-493c-b';
-export const CONVERSATION_ID = '7ba4cca9-4115-4a5d-a';
+export const {
+    REACT_APP_APP_ENV: APP_ENV,
+    // REACT_APP_DEV_USER_ID: DEV_USER_ID,
+    // REACT_APP_DEV_CONVERSATION_ID: DEV_CONVERSATION_ID,
+    REACT_APP_PROD_USER_ID: PROD_USER_ID,
+    REACT_APP_PROD_CONVERSATION_ID: PROD_CONVERSATION_ID,
+} = process.env;
+
+// export const USER_ID = 'cefece6f-3a77-493c-b'; // PROD
+// export const CONVERSATION_ID = '7ba4cca9-4115-4a5d-a'; // PROD
+export const DEV_USER_ID = 'be2c9c89-ec4a-4fee-8';
+export const DEV_CONVERSATION_ID = 'ea5bdd64-1495-40dd-b';
+
+export const USER_ID = APP_ENV === 'production' ? PROD_USER_ID as string : 'be2c9c89-ec4a-4fee-8';
+export const CONVERSATION_ID = APP_ENV === 'production' ? PROD_CONVERSATION_ID as string : 'ea5bdd64-1495-40dd-b';
+
 export const MESSAGES_LIST = [
     {
         content: 'Hi, how I can help you with your tax questions?',
