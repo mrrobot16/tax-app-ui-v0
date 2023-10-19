@@ -6,7 +6,7 @@ export type Message = {
 export type MessagesListProps = {
     loading: boolean;
     messages: Message[];
-    assistantLoadingMessage: Message;
+    assistantLoadingMessage?: Message;
 }
 
 export type SendMessagesProps = {
