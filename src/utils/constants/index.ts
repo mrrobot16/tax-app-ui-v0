@@ -6,3 +6,7 @@ export const MESSAGES_LIST = [
         role: 'assistant',
     },
 ];
+export const ASSISTANT_LOADING_MESSAGE = {
+    content: 'One second please.',
+    role: 'assistant',
+};
