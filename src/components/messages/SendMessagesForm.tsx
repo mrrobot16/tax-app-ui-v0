@@ -1,4 +1,4 @@
-import { CSSProperties, FormEvent, KeyboardEvent, ChangeEvent, useState } from 'react';
+import { CSSProperties, FormEvent, KeyboardEvent, ChangeEvent, useState, useEffect } from 'react';
 import { MessagesComponentsStyling } from 'components/messages/styles';
 import { SendMessagesProps } from 'types';
 import { LoadingDots } from 'components';
@@ -8,6 +8,14 @@ const { styles } = MessagesComponentsStyling;
 
 export function SendMessage({sendMessage, loading }: SendMessagesProps) {
   const [message, setMessage] = useState<string>('');
+  const [rows, setRows] = useState<number>(1);
+
+  useEffect(() => {
+    const numberOfLineBreaks = (message.match(/\n/g) || []).length;
+
+    // Minimum rows = 1, Maximum rows = 4
+    setRows(Math.min(4, Math.max(1, numberOfLineBreaks + 1)));
+  }, [message]);
 
   const onChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setMessage(event.target.value);
@@ -20,10 +28,16 @@ export function SendMessage({sendMessage, loading }: SendMessagesProps) {
     setMessage('');
   };
 
-  const handleEnter = (event: KeyboardEvent | FormEvent) => {
-    if ((event as KeyboardEvent).key === 'Enter' && message) {
-      onSubmit(event as FormEvent<HTMLFormElement>);
-      setMessage('');
+  const handleEnter = (event: KeyboardEvent<HTMLInputElement> | FormEvent) => {
+    if ((event as KeyboardEvent).key === 'Enter') {
+      event.preventDefault();
+
+      if ((event as KeyboardEvent).shiftKey) {
+        setMessage(`${message }\n`);
+      } else if (message) {
+        onSubmit(event as FormEvent<HTMLFormElement>);
+        setMessage('');
+      }
     }
   };
 
@@ -33,7 +47,7 @@ export function SendMessage({sendMessage, loading }: SendMessagesProps) {
         <textarea
           disabled={loading}
           onKeyDown={handleEnter}
-          rows={1}
+          rows={rows}
           maxLength={5000}
           aria-multiline
           id="sendMessageInput"
