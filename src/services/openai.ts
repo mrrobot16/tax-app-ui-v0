@@ -39,3 +39,14 @@ export async function newConversationMessage(
         console.error('Error with new conversation with openai', error);
     }
 }
+
+export async function checkOpenAIStatus() {
+    try {
+        const url = `${API_BASE_URL}/openai/status`;
+        const response = await axios.get(url);
+
+        return response;
+    } catch (error) {
+        console.error('Error with checking openai status', error);
+    }
+}

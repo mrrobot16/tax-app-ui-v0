@@ -1,11 +1,11 @@
 
-import { CSSProperties, useState, useEffect } from 'react';
+import { CSSProperties, useState, useEffect, useRef } from 'react';
 
 import { ChatContainerStyling } from 'containers/Chat/styles';
 import { MessagesList, SendMessagesForm, ErrorMessage } from 'components';
 import { MESSAGES_LIST, USER_ID, CONVERSATION_ID, ASSISTANT_LOADING_MESSAGE } from 'utils/constants';
 import { Message } from 'types';
-import { newConversationWithOpenai, newConversationMessage } from 'services';
+import { newConversationWithOpenai, newConversationMessage, checkOpenAIStatus } from 'services';
 
 const { classNames, styles } = ChatContainerStyling;
 
@@ -15,6 +15,7 @@ export function Chat() {
   const [conversationId, setConversationId] = useState<string | null>(CONVERSATION_ID);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const hasMounted = useRef(false);
 
   const setUpdatedMessage = (message: Message) => {
     setMessageList((prevMessageList: Message[]) => {
@@ -70,6 +71,28 @@ export function Chat() {
       setLoading(false);
     }
   };
+
+  const checkOpenAIHealth = async () => {
+    const health = await checkOpenAIStatus();
+
+    if(health?.status === 200) {
+      console.log('All good with api health: ', health);
+    }
+
+    if(!(health?.data.status === 'success')) {
+      console.log('Something wrong with api health: ', health);
+    }
+  };
+
+  const componentDidMount = () => {
+    if (!hasMounted.current) { // Checking if the component has not mounted
+      checkOpenAIHealth();
+      hasMounted.current = true; // Updating the ref value after the initial mount
+    }
+  };
+
+
+  useEffect(componentDidMount, []);
 
   return (
     <div className={classNames.container}>
