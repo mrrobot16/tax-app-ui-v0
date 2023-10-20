@@ -6,6 +6,26 @@ export const {
     REACT_APP_PROD_CONVERSATION_ID: PROD_CONVERSATION_ID,
 } = process.env;
 
+// Localhost
+export const LOCAL_BASE_URL = 'http://localhost:8000';
+// Dev Env
+export const DEV_BASE_URL = 'http://localhost:8000';
+
+// Prod Env
+// Flask API
+export const PROD_BASE_URL = 'https://irs-copilot-dev-f3ffc3a3fca9.herokuapp.com';
+// Fast API
+// export const PROD_BASE_URL = 'https://irs-copilot-543238a8f348.herokuapp.com';
+
+// Staging Env
+// Flask API
+export const STAGING_BASE_URL = 'https://irs-copilot-dev-f3ffc3a3fca9.herokuapp.com';
+// Fast API
+// export const STAGING_BASE_URL = 'https://irs-copilot-543238a8f348.herokuapp.com';
+
+export const VERCEL_BASE_URL = 'https://irs-copilot.vercel.app';
+
+
 // export const USER_ID = 'cefece6f-3a77-493c-b'; // PROD
 // export const CONVERSATION_ID = '7ba4cca9-4115-4a5d-a'; // PROD
 export const DEV_USER_ID = 'be2c9c89-ec4a-4fee-8';
@@ -24,3 +44,4 @@ export const ASSISTANT_LOADING_MESSAGE = {
     content: 'One second please.',
     role: 'assistant',
 };
+

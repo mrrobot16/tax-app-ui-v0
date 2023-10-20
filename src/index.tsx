@@ -4,10 +4,13 @@ import 'index.css';
 import App from 'App';
 import reportWebVitals from 'reportWebVitals';
 import 'config/firebase';
+import { initSentry } from 'config/sentry';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+initSentry();
 
 root.render(
   <React.StrictMode>

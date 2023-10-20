@@ -1,16 +1,17 @@
 import { AppConfig } from 'types';
+import { LOCAL_BASE_URL, PROD_BASE_URL, STAGING_BASE_URL } from 'utils/constants';
 
 export const APP_ENV = process.env.REACT_APP_APP_ENV || 'development';
 
 const config: AppConfig = {
   'development': {
-    API_BASE_URL: 'http://localhost:8000',
+    API_BASE_URL: LOCAL_BASE_URL,
   },
   'production': {
-    API_BASE_URL: 'https://irs-copilot-dev-f3ffc3a3fca9.herokuapp.com',
+    API_BASE_URL: PROD_BASE_URL,
   },
   'staging': {
-    API_BASE_URL: 'https://irs-copilot-dev-f3ffc3a3fca9.herokuapp.com',
+    API_BASE_URL: STAGING_BASE_URL,
   },
 };
 
