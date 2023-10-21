@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-export type TypewriterProps = {
-    content: string;
-    delay: number;
-}
+import { TypewriterProps } from 'types';
+
 
 const Typewriter = ({ content, delay }: TypewriterProps) => {
   const [currentText, setCurrentText] = useState('');
