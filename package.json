@@ -34,10 +34,11 @@
   "scripts": {
     "dev": "yarn start",
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && yarn sentry:sourcemaps",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint '**/*.ts' '**/*.tsx'"
+    "lint": "eslint '**/*.ts' '**/*.tsx'",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org irs-copilot --project irs-copilot-ui ./build/static/js && sentry-cli sourcemaps upload --org irs-copilot --project irs-copilot-ui ./build/static/js"
   },
   "eslintConfig": {
     "extends": [

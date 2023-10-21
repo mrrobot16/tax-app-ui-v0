@@ -24,3 +24,5 @@ yarn-error.log*
 
 .env
 gitcommits.sh
+# Sentry Config File
+.sentryclirc
