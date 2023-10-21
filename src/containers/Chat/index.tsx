@@ -1,11 +1,11 @@
 
-import { CSSProperties, useState, useEffect, useRef } from 'react';
+import { CSSProperties, useState, useEffect, useRef, useCallback } from 'react';
 
 import { ChatContainerStyling } from 'containers/Chat/styles';
 import { MessagesList, SendMessagesForm, ErrorMessage } from 'components';
 import { MESSAGES_LIST, USER_ID, CONVERSATION_ID, ASSISTANT_LOADING_MESSAGE } from 'utils/constants';
 import { Message } from 'types';
-import { newConversationWithOpenai, newConversationMessage, checkOpenAIStatus } from 'services';
+import { newConversationWithOpenai, newConversationMessage, openAIStatus } from 'services';
 
 const { classNames, styles } = ChatContainerStyling;
 
@@ -14,8 +14,44 @@ export function Chat() {
   const [userId, setUserId] = useState<string | null>(USER_ID);
   const [conversationId, setConversationId] = useState<string | null>(CONVERSATION_ID);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [codeRed, setCodeRed] = useState(false);
   const hasMounted = useRef(false);
+
+  const handleError = (error: string | null | boolean | Error | unknown) => {
+    setErrorMessage(`
+    We apologize for the inconvenience, our system is having load issues. 
+    Our team is working to improve performance try again in a few minutes.
+    Thank you for your patience.
+    `);
+    setCodeRed(true);
+    setLoading(false);
+  };
+
+  const setErrorMessages = () => {
+    setCodeRed(true);
+    setErrorMessage(`
+    We apologize for the inconvenience, our system is undergoing maintenance to improve your experience. 
+    Thank you for your patience.
+    `);
+  };
+
+  const checkOpenAIStatus = useCallback(async () => {
+    const health = await openAIStatus(setErrorMessages);
+
+    if(health.status === 200) {
+      console.log('All good with api health: ', health);
+    }
+
+    if(health.status === 500) {
+      setCodeRed(true);
+      console.log('Something wrong with api health: ', health);
+      setErrorMessage(`
+      We apologize for the inconvenience, our system is undergoing scheduled maintenance. 
+      Thank you for your patience.
+      `);
+    }
+  }, []);
 
   const setUpdatedMessage = (message: Message) => {
     setMessageList((prevMessageList: Message[]) => {
@@ -27,7 +63,7 @@ export function Chat() {
     });
   };
 
-  const createConversationMessage = async (message: Message) => {
+  const sendMessage = async (message: Message) => {
     setLoading(true);
 
     const newMessage = {
@@ -58,53 +94,47 @@ export function Chat() {
     }
 
     if(conversationId && userId) {
-      const response = await newConversationMessage(userId, conversationId, newMessage);
-      const openaiResponse = response?.data.openai_message;
-      const { content, role, conversation_id } = openaiResponse;
-      const assistantMessage = {
-        content,
-        role,
-      };
+      try {
+        const response = await newConversationMessage(userId, conversationId, newMessage, handleError);
+        const openaiResponse = response?.data.openai_message;
+        const { content, role, conversation_id } = openaiResponse;
+        const assistantMessage = {
+          content,
+          role,
+        };
 
-      setUpdatedMessage(assistantMessage);
-
-      setLoading(false);
-    }
-  };
-
-  const checkOpenAIHealth = async () => {
-    const health = await checkOpenAIStatus();
-
-    if(health?.status === 200) {
-      console.log('All good with api health: ', health);
-    }
-
-    if(!(health?.data.status === 'success')) {
-      console.log('Something wrong with api health: ', health);
+        setUpdatedMessage(assistantMessage);
+        setLoading(false);
+      } catch (error) {
+        setUpdatedMessage({
+          content: 'Sorry, message not sent. Please try again',
+          role: 'assistant',
+        });
+        console.error(error);
+      }
     }
   };
 
   const componentDidMount = () => {
     if (!hasMounted.current) { // Checking if the component has not mounted
-      checkOpenAIHealth();
+      checkOpenAIStatus();
       hasMounted.current = true; // Updating the ref value after the initial mount
     }
   };
 
-
-  useEffect(componentDidMount, []);
+  useEffect(componentDidMount, [checkOpenAIStatus]);
 
   return (
     <div className={classNames.container}>
-      <h1 className={classNames.title}>Chat with Tax Copilot</h1>
+      <h1 className={classNames.title} style={{ color: codeRed ? 'red' : 'inherit' }}>{!codeRed ? 'Chat with Tax Copilot' : 'Chat with Tax Copilot'}</h1>
       <main style={styles.main}>
         <div className="MessageListContainer" style={styles.messageListContainer}>
             <MessagesList messages={messageList} loading={loading} />
         </div>
         <div className="SendMessageContainer" style={styles.sendMessageContainer as CSSProperties}>
-            <SendMessagesForm loading={loading} sendMessage={createConversationMessage} />
+          <SendMessagesForm codeRed={codeRed} loading={loading} sendMessage={sendMessage} />
         </div>
-        { error && <ErrorMessage error={error} /> }
+        { codeRed && <ErrorMessage error={errorMessage} /> }
       </main>
     </div>
   );

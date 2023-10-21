@@ -40,6 +40,7 @@ export function SendMessage({sendMessage, loading }: SendMessagesProps) {
       }
     }
   };
+  const placeholder = loading ? 'Waiting for response...' : 'Type your tax question';
 
   return (
     <div className="SendMessageForm" style={styles.sendMessageForm as CSSProperties}>
@@ -51,11 +52,7 @@ export function SendMessage({sendMessage, loading }: SendMessagesProps) {
           maxLength={5000}
           aria-multiline
           id="sendMessageInput"
-          placeholder={
-            loading
-              ? 'Waiting for response...'
-              : 'Type your tax question'
-          }
+          placeholder={placeholder}
           value={message}
           onChange={onChange}
           style={styles.sendMessageInput as CSSProperties}
