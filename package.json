@@ -33,6 +33,7 @@
     "typescript": "^4.4.2"
   },
   "scripts": {
+    "push": "git push origin dev",
     "dev": "yarn start",
     "start": "react-scripts start",
     "build": "react-scripts build && yarn sentry:sourcemaps",
