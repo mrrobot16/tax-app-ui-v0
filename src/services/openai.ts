@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { Axios, AxiosError } from 'axios';
 import { API_BASE_URL } from 'config/app';
 import { Message } from 'types';
 
@@ -24,6 +24,7 @@ export async function newConversationMessage(
     user_id: string,
     conversation_id: string,
     message: Message,
+    callback?: (error?: string | null | boolean | Error | unknown) => void
 ) {
     try {
         const url = `${API_BASE_URL}/conversations/message/new/openai/${conversation_id}`;
@@ -35,18 +36,34 @@ export async function newConversationMessage(
         const response = await axios.post(url, body);
 
         return response;
-    } catch (error) {
+    } catch (error: AxiosError | unknown) {
         console.error('Error with new conversation with openai', error);
+
+        if(callback) {
+            callback(error);
+        }
+
+        throw error;
     }
 }
 
-export async function checkOpenAIStatus() {
+type openAIStatusCallback = {
+    (error?: string | AxiosError | unknown): void;
+}
+
+export async function openAIStatus(callback: openAIStatusCallback) : Promise<{ status: number | undefined, error?: AxiosError }> {
     try {
         const url = `${API_BASE_URL}/openai/status`;
         const response = await axios.get(url);
 
         return response;
-    } catch (error) {
+    } catch (error: AxiosError | unknown) {
         console.error('Error with checking openai status', error);
+        callback(error);
+
+        return {
+            error: error as AxiosError,
+            status: (error as AxiosError).response?.status,
+        };
     }
 }

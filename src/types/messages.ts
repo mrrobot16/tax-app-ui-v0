@@ -12,4 +12,5 @@ export type MessagesListProps = {
 export type SendMessagesProps = {
     loading: boolean;
     sendMessage: (message: Message) => void;
+    codeRed: boolean;
 };
