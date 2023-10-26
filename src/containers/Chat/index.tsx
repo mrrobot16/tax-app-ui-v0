@@ -45,15 +45,40 @@ export function Chat() {
   const checkOpenAIStatus = useCallback(async () => {
     const health = await openAIStatus(setStatusErrorMessages);
 
+    console.log('status', health);
+
     if(health.status === 200) {
-      console.log('All good with api health: ', health);
+      console.log('All good with OpenAI api health: ', health);
+    }
+
+    if(health.status === 500 || health.status === 503) {
+      setCodeRed(true);
+      console.log('Something wrong with OpenAI API health: ', health);
+
+      const message = health.status === 500 ? `
+      We apologize for the inconvenience, our system is undergoing scheduled maintenance. 
+      Thank you for your patience.
+      ` : health.status === 503 ? `
+      We apologize for the inconvenience, our app is undergoing scheduled maintenance. 
+      Thank you for your patience.
+      ` : null;
+
+      setErrorMessage(message);
+    }
+  }, []);
+
+  const checkAPIStatus = useCallback(async () => {
+    const health = await apiStatus(setStatusErrorMessages);
+
+    if(health.status === 200) {
+      console.log('All good with API health: ', health);
     }
 
     if(health.status === 500) {
       setCodeRed(true);
-      console.log('Something wrong with api health: ', health);
+      console.log('Something wrong with API health: ', health);
       setErrorMessage(`
-      We apologize for the inconvenience, our system is undergoing scheduled maintenance. 
+      We apologize for the inconvenience, our platform is undergoing scheduled maintenance. 
       Thank you for your patience.
       `);
     }
@@ -111,10 +136,8 @@ export function Chat() {
 
         setUpdatedMessage(assistantMessage);
         setLoading(false);
-        console.log('codeRed', codeRed);
 
-        if(codeRed || errorMessage) {
-          console.log('does this happen?');
+        if(response && codeRed || errorMessage) {
           clearErrorMessages();
         }
       } catch (error) {
@@ -129,12 +152,13 @@ export function Chat() {
 
   const componentDidMount = () => {
     if (!hasMounted.current) { // Checking if the component has not mounted
+      checkAPIStatus();
       checkOpenAIStatus();
       hasMounted.current = true; // Updating the ref value after the initial mount
     }
   };
 
-  useEffect(componentDidMount, [checkOpenAIStatus]);
+  useEffect(componentDidMount, [checkOpenAIStatus, checkAPIStatus]);
 
   return (
     <div className={classNames.container}>
