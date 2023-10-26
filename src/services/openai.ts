@@ -67,3 +67,19 @@ export async function openAIStatus(callback: openAIStatusCallback) : Promise<{ s
         };
     }
 }
+
+export async function apiStatus(callback?: (message: string) => void) {
+    try {
+        const url = `${API_BASE_URL}/`;
+        const response = await axios.get(url);
+
+        return response;
+    } catch (error: AxiosError | unknown) {
+        console.error('Error with checking api status', error);
+
+        return {
+            error: error as AxiosError,
+            status: (error as AxiosError).response?.status,
+        };
+    }
+}
