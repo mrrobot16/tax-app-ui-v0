@@ -45,8 +45,6 @@ export function Chat() {
   const checkOpenAIStatus = useCallback(async () => {
     const health = await openAIStatus(setStatusErrorMessages);
 
-    console.log('status', health);
-
     if(health.status === 200) {
       console.log('All good with OpenAI api health: ', health);
     }
