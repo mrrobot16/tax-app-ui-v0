@@ -5,7 +5,8 @@ import { ChatContainerStyling } from 'containers/Chat/styles';
 import { MessagesList, SendMessagesForm, ErrorMessage } from 'components';
 import { MESSAGES_LIST, USER_ID, CONVERSATION_ID, ASSISTANT_LOADING_MESSAGE } from 'utils/constants';
 import { Message } from 'types';
-import { newConversationWithOpenai, newConversationMessage, openAIStatus } from 'services';
+import { newConversationWithOpenai, newConversationMessage, openAIStatus, apiStatus } from 'services';
+import { AxiosError } from 'axios';
 
 const { classNames, styles } = ChatContainerStyling;
 
@@ -14,11 +15,11 @@ export function Chat() {
   const [userId, setUserId] = useState<string | null>(USER_ID);
   const [conversationId, setConversationId] = useState<string | null>(CONVERSATION_ID);
   const [loading, setLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null | AxiosError>(null);
   const [codeRed, setCodeRed] = useState(false);
   const hasMounted = useRef(false);
 
-  const handleError = (error: string | null | boolean | Error | unknown) => {
+  const handleError = (error?: string | null | boolean | Error | unknown) => {
     setErrorMessage(`
     We apologize for the inconvenience, our system is having load issues. 
     Our team is working to improve performance try again in a few minutes.
@@ -28,7 +29,7 @@ export function Chat() {
     setLoading(false);
   };
 
-  const setErrorMessages = () => {
+  const setStatusErrorMessages = (error?: string | AxiosError | unknown) => {
     setCodeRed(true);
     setErrorMessage(`
     We apologize for the inconvenience, our system is undergoing maintenance to improve your experience. 
@@ -36,8 +37,13 @@ export function Chat() {
     `);
   };
 
+  const clearErrorMessages = () => {
+    setCodeRed(false);
+    setErrorMessage(null);
+  };
+
   const checkOpenAIStatus = useCallback(async () => {
-    const health = await openAIStatus(setErrorMessages);
+    const health = await openAIStatus(setStatusErrorMessages);
 
     if(health.status === 200) {
       console.log('All good with api health: ', health);
@@ -105,6 +111,12 @@ export function Chat() {
 
         setUpdatedMessage(assistantMessage);
         setLoading(false);
+        console.log('codeRed', codeRed);
+
+        if(codeRed || errorMessage) {
+          console.log('does this happen?');
+          clearErrorMessages();
+        }
       } catch (error) {
         setUpdatedMessage({
           content: 'Sorry, message not sent. Please try again',
