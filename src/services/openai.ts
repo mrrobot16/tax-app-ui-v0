@@ -77,9 +77,11 @@ export async function apiStatus(callback?: (message: string) => void) {
     } catch (error: AxiosError | unknown) {
         console.error('Error with checking api status', error);
 
+        const status = (error as AxiosError).response?.status ? (error as AxiosError).response?.status : null;
+
         return {
             error: error as AxiosError,
-            status: (error as AxiosError).response?.status,
+            status: status || 500,
         };
     }
 }
