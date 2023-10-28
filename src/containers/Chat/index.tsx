@@ -160,7 +160,7 @@ export function Chat() {
 
   return (
     <div className={classNames.container}>
-      <h1 className={classNames.title} style={{ color: codeRed ? 'red' : 'inherit' }}>{!codeRed ? 'Chat with Tax Copilot' : 'Chat with Tax Copilot'}</h1>
+      <h1 className={classNames.title} style={{ color: codeRed ? 'red' : 'inherit' }}>Chat with Tax App</h1>
       <main style={styles.main}>
         <div className="MessageListContainer" style={styles.messageListContainer}>
             <MessagesList messages={messageList} loading={loading} />
