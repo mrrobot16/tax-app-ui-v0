@@ -13,13 +13,9 @@ export const DEV_BASE_URL = 'http://localhost:8000';
 
 // Prod Env
 // Flask API
-// export const PROD_BASE_URL = 'https://irs-copilot-dev-f3ffc3a3fca9.herokuapp.com';
+export const PROD_BASE_URL = 'https://irs-copilot-dev-f3ffc3a3fca9.herokuapp.com';
 // Fast API
 // export const PROD_BASE_URL = 'https://tax-app-api-dev-004c410e86db.herokuapp.com';
-// FastAPI with NROK
-// export const PROD_BASE_URL = 'https://2d9c-200-68-170-114.ngrok.io';
-export const PROD_BASE_URL = 'https://a440-149-19-169-17.ngrok.io';
-
 
 // Staging Env
 // Flask API
