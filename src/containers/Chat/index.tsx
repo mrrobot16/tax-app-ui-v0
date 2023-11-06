@@ -155,7 +155,6 @@ export function Chat() {
       hasMounted.current = true; // Updating the ref value after the initial mount
     }
   };
-  // newConversationMessageV1(message)
 
   const sendMessageV1 = async (message: Message) => {
     setLoading(true);
@@ -174,16 +173,13 @@ export function Chat() {
     setMessageList(setNewMessage);
 
     const response = await newConversationMessageV1(newMessage);
+    const { content, role } = response.data.message;
+    const assistantMessage = {
+      content,
+      role,
+    };
 
-    console.log('response', response);
-    // const openaiResponse = response?.data.openai_message;
-    // const { content, role } = openaiResponse;
-    // const assistantMessage = {
-    //   content,
-    //   role,
-    // };
-
-    // setUpdatedMessage(assistantMessage);
+    setUpdatedMessage(assistantMessage);
     setLoading(false);
 
     if(response && codeRed || errorMessage) {

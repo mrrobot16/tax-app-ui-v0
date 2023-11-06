@@ -97,8 +97,6 @@ export async function newConversationMessageV1(
         };
         const response = await axios.post(url, body);
 
-        console.log('response', response);
-
         return response;
     } catch (error: AxiosError | unknown) {
         console.error('Error with openai/chat-completion', error);
