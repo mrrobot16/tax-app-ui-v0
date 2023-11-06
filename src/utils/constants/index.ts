@@ -17,7 +17,8 @@ export const DEV_BASE_URL = 'http://localhost:8000';
 // Fast API
 // export const PROD_BASE_URL = 'https://tax-app-api-dev-004c410e86db.herokuapp.com';
 // FastAPI with NROK
-export const PROD_BASE_URL = 'https://2d9c-200-68-170-114.ngrok.io';
+// export const PROD_BASE_URL = 'https://2d9c-200-68-170-114.ngrok.io';
+export const PROD_BASE_URL = 'https://a440-149-19-169-17.ngrok.io';
 
 
 // Staging Env
