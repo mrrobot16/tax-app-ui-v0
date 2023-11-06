@@ -13,9 +13,12 @@ export const DEV_BASE_URL = 'http://localhost:8000';
 
 // Prod Env
 // Flask API
-export const PROD_BASE_URL = 'https://irs-copilot-dev-f3ffc3a3fca9.herokuapp.com';
+// export const PROD_BASE_URL = 'https://irs-copilot-dev-f3ffc3a3fca9.herokuapp.com';
 // Fast API
 // export const PROD_BASE_URL = 'https://tax-app-api-dev-004c410e86db.herokuapp.com';
+
+// FastAPI AWS Linux Virtual Server
+export const PROD_BASE_URL = 'http://api.taxapp.chat';
 
 // Staging Env
 // Flask API
