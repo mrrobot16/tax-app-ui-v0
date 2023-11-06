@@ -85,3 +85,28 @@ export async function apiStatus(callback?: (message: string) => void) {
         };
     }
 }
+
+export async function newConversationMessageV1(
+    message: Message,
+    callback?: (error?: string | null | boolean | Error | unknown) => void
+) {
+    try {
+        const url = `${API_BASE_URL}/openai/chat-completion`;
+        const body = {
+            ...message,
+        };
+        const response = await axios.post(url, body);
+
+        console.log('response', response);
+
+        return response;
+    } catch (error: AxiosError | unknown) {
+        console.error('Error with openai/chat-completion', error);
+
+        if(callback) {
+            callback(error);
+        }
+
+        throw error;
+    }
+}

@@ -5,7 +5,7 @@ import { ChatContainerStyling } from 'containers/Chat/styles';
 import { MessagesList, SendMessagesForm, ErrorMessage } from 'components';
 import { MESSAGES_LIST, USER_ID, CONVERSATION_ID, ASSISTANT_LOADING_MESSAGE } from 'utils/constants';
 import { Message } from 'types';
-import { newConversationWithOpenai, newConversationMessage, openAIStatus, apiStatus } from 'services';
+import { newConversationWithOpenai, newConversationMessage, openAIStatus, apiStatus, newConversationMessageV1 } from 'services';
 import { AxiosError } from 'axios';
 
 const { classNames, styles } = ChatContainerStyling;
@@ -155,6 +155,41 @@ export function Chat() {
       hasMounted.current = true; // Updating the ref value after the initial mount
     }
   };
+  // newConversationMessageV1(message)
+
+  const sendMessageV1 = async (message: Message) => {
+    setLoading(true);
+
+    const newMessage = {
+      content: message.content,
+      role: message.role,
+    };
+
+    const setNewMessage = (prevMessageList: Message[]) => [
+      ...prevMessageList,
+      newMessage,
+      ASSISTANT_LOADING_MESSAGE,
+    ];
+
+    setMessageList(setNewMessage);
+
+    const response = await newConversationMessageV1(newMessage);
+
+    console.log('response', response);
+    // const openaiResponse = response?.data.openai_message;
+    // const { content, role } = openaiResponse;
+    // const assistantMessage = {
+    //   content,
+    //   role,
+    // };
+
+    // setUpdatedMessage(assistantMessage);
+    setLoading(false);
+
+    if(response && codeRed || errorMessage) {
+      clearErrorMessages();
+    }
+  };
 
   useEffect(componentDidMount, [checkOpenAIStatus, checkAPIStatus]);
 
@@ -166,7 +201,7 @@ export function Chat() {
             <MessagesList messages={messageList} loading={loading} />
         </div>
         <div className="SendMessageContainer" style={styles.sendMessageContainer as CSSProperties}>
-          <SendMessagesForm codeRed={codeRed} loading={loading} sendMessage={sendMessage} />
+          <SendMessagesForm codeRed={codeRed} loading={loading} sendMessage={sendMessageV1} />
         </div>
         { codeRed && <ErrorMessage error={errorMessage} /> }
       </main>
