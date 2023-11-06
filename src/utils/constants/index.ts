@@ -13,15 +13,16 @@ export const DEV_BASE_URL = 'http://localhost:8000';
 
 // Prod Env
 // Flask API
-export const PROD_BASE_URL = 'https://irs-copilot-dev-f3ffc3a3fca9.herokuapp.com';
+// export const PROD_BASE_URL = 'https://irs-copilot-dev-f3ffc3a3fca9.herokuapp.com';
 // Fast API
-// export const PROD_BASE_URL = 'https://irs-copilot-543238a8f348.herokuapp.com';
+export const PROD_BASE_URL = 'https://tax-app-api-dev-004c410e86db.herokuapp.com';
+
 
 // Staging Env
 // Flask API
-export const STAGING_BASE_URL = 'https://irs-copilot-dev-f3ffc3a3fca9.herokuapp.com';
+// export const STAGING_BASE_URL = 'https://irs-copilot-dev-f3ffc3a3fca9.herokuapp.com';
 // Fast API
-// export const STAGING_BASE_URL = 'https://irs-copilot-543238a8f348.herokuapp.com';
+export const STAGING_BASE_URL = 'https://tax-app-api-dev-004c410e86db.herokuapp.com/';
 
 export const VERCEL_BASE_URL = 'https://irs-copilot.vercel.app';
 
