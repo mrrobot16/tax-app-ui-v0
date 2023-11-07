@@ -18,7 +18,7 @@ export const DEV_BASE_URL = 'http://localhost:8000';
 // export const PROD_BASE_URL = 'https://tax-app-api-dev-004c410e86db.herokuapp.com';
 
 // FastAPI AWS Linux Virtual Server
-export const PROD_BASE_URL = 'http://api.taxapp.chat';
+export const PROD_BASE_URL = 'https://api.taxapp.chat';
 
 // Staging Env
 // Flask API
