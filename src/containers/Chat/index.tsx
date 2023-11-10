@@ -1,6 +1,7 @@
 
 import { CSSProperties, useState, useEffect, useRef, useCallback } from 'react';
 
+import 'containers/Chat/styles.css';
 import { ChatContainerStyling } from 'containers/Chat/styles';
 import { MessagesList, SendMessagesForm, ErrorMessage } from 'components';
 import { MESSAGES_LIST, USER_ID, CONVERSATION_ID, ASSISTANT_LOADING_MESSAGE } from 'utils/constants';
