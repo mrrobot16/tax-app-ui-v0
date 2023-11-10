@@ -4,6 +4,7 @@ import {
 } from 'react-router-dom';
 
 import { Chat } from 'containers';
+import { Chat2 } from 'containers/Chat2';
 
 export const routes = [
   {
@@ -13,6 +14,10 @@ export const routes = [
   {
     path: '/chat',
     element: <Chat />,
+  },
+  {
+    path: '/chat2',
+    element: <Chat2 />,
   },
 ];
 

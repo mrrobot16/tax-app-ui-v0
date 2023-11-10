@@ -11,7 +11,7 @@ import { AxiosError } from 'axios';
 
 const { classNames, styles } = ChatContainerStyling;
 
-export function Chat() {
+export function Chat2() {
   const [messageList, setMessageList] = useState<Message[]>(MESSAGES_LIST);
   const [userId, setUserId] = useState<string | null>(USER_ID);
   const [conversationId, setConversationId] = useState<string | null>(CONVERSATION_ID);
@@ -207,4 +207,4 @@ export function Chat() {
   );
 }
 
-export default Chat;
+export default Chat2;
