@@ -11,7 +11,7 @@ import { AxiosError } from 'axios';
 
 const { classNames, styles } = ChatContainerStyling;
 
-export function Chat2() {
+export function ChatV2() {
   const [messageList, setMessageList] = useState<Message[]>(MESSAGES_LIST);
   const [userId, setUserId] = useState<string | null>(USER_ID);
   const [conversationId, setConversationId] = useState<string | null>(CONVERSATION_ID);
@@ -193,7 +193,7 @@ export function Chat2() {
 
   return (
     <div className={classNames.container}>
-      <h1 className={classNames.title} style={{ color: codeRed ? 'red' : 'inherit' }}>Chat with Tax App</h1>
+      <h1 className={classNames.title} style={{ color: codeRed ? 'red' : 'inherit' }}>Chat with Tax App V2</h1>
       <main style={styles.main}>
         <div className="MessageListContainer" style={styles.messageListContainer}>
             <MessagesList messages={messageList} loading={loading} />
@@ -207,4 +207,4 @@ export function Chat2() {
   );
 }
 
-export default Chat2;
+export default ChatV2;
