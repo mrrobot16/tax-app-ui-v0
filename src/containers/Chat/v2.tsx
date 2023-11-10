@@ -2,8 +2,8 @@
 import { CSSProperties, useState, useEffect, useRef, useCallback } from 'react';
 
 import 'containers/Chat/styles.css';
-import { ChatContainerStyling } from 'containers/Chat/styles';
-import { MessagesList, SendMessagesForm, ErrorMessage } from 'components';
+import { ChatContainerStyling } from 'containers/Chat/stylesV2';
+import { MessagesList, SendMessagesForm, ErrorMessage, Sidebar, SidebarToggleButton } from 'components';
 import { MESSAGES_LIST, USER_ID, CONVERSATION_ID, ASSISTANT_LOADING_MESSAGE } from 'utils/constants';
 import { Message } from 'types';
 import { newConversationWithOpenai, newConversationMessage, openAIStatus, apiStatus, newConversationMessageV1 } from 'services';
@@ -193,16 +193,20 @@ export function ChatV2() {
 
   return (
     <div className={classNames.container}>
-      <h1 className={classNames.title} style={{ color: codeRed ? 'red' : 'inherit' }}>Chat with Tax App V2</h1>
-      <main style={styles.main}>
-        <div className="MessageListContainer" style={styles.messageListContainer}>
+      <SidebarToggleButton setIsSidebarOpen={setIsSidebarOpen} isSidebarOpen={false} />
+      <Sidebar isSidebarOpen={isSidebarOpen} />
+      <div className="flex flex-col w-full h-full md:pl-64"> {/* Adjust padding to match the sidebar width */}
+        <h1 className={classNames.title} style={{ color: codeRed ? 'red' : 'inherit' }}>Chat with Tax App V2</h1>
+        <main style={styles.main}>
+          <div className="MessageListContainer" style={styles.messageListContainer}>
             <MessagesList messages={messageList} loading={loading} />
-        </div>
-        <div className="SendMessageContainer" style={styles.sendMessageContainer as CSSProperties}>
-          <SendMessagesForm codeRed={codeRed} loading={loading} sendMessage={sendMessageV1} />
-        </div>
-        { codeRed && <ErrorMessage error={errorMessage} /> }
-      </main>
+          </div>
+          <div className="SendMessageContainer" style={styles.sendMessageContainer}>
+            <SendMessagesForm codeRed={codeRed} loading={loading} sendMessage={sendMessageV1} />
+          </div>
+          { codeRed && <ErrorMessage error={errorMessage} /> }
+        </main>
+      </div>
     </div>
   );
 }

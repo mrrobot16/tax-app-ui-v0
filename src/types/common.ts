@@ -10,6 +10,11 @@ export type TypewriterProps = {
 
 export type SidebarProps = {
     isSidebarOpen: boolean;
-    setIsSidebarOpen: (value: boolean) => void;
+    setIsSidebarOpen?: (value: boolean) => void;
 };
+
+export type SidebarToggleButtonProps = {
+    isSidebarOpen: boolean
+    setIsSidebarOpen(value: boolean): void
+}
 
