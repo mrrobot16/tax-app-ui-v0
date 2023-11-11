@@ -52,6 +52,7 @@ module.exports = {
   },
 
   rules: {
+    'import/no-extraneous-dependencies': 'off',
     'strict': [2, 'never'],
 
     'arrow-body-style': [0, 'as-needed', { requireReturnForObjectLiteral: false }], // require parens in arrow function arguments // handled by #prettier. this becomes optional as upgrade to TypeScript will require us to have type metadata in function signature

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@faker-js/faker": "^8.2.0",
     "@sentry/cli": "^2.21.2",
     "@sentry/react": "^7.74.1",
     "@testing-library/jest-dom": "^5.14.1",

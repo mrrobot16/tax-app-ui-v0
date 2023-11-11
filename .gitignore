@@ -26,3 +26,5 @@ yarn-error.log*
 gitcommits.sh
 # Sentry Config File
 .sentryclirc
+
+dead_code.js
