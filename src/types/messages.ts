@@ -1,4 +1,5 @@
 export type Message = {
+    user_id?: string;
     content: string;
     role: string;
 }
