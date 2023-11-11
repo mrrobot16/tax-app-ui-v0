@@ -11,23 +11,19 @@ export const LOCAL_BASE_URL = 'http://localhost:8000';
 // Dev Env
 export const DEV_BASE_URL = 'http://localhost:8000';
 
-// Prod Env
-// Flask API
+// HEROKU ENDPOINTS
+// Flask API Production Env
 // export const PROD_BASE_URL = 'https://irs-copilot-dev-f3ffc3a3fca9.herokuapp.com';
-// Fast API
+// Fast API Production Env
 // export const PROD_BASE_URL = 'https://tax-app-api-dev-004c410e86db.herokuapp.com';
+// Fast API Staging Env
+export const STAGING_BASE_URL = 'https://tax-app-api-dev-004c410e86db.herokuapp.com/';
 
+// AWS ENDPOINTS
 // FastAPI AWS Linux Virtual Server
 export const PROD_BASE_URL = 'https://api.taxapp.chat';
 
-// Staging Env
-// Flask API
-// export const STAGING_BASE_URL = 'https://irs-copilot-dev-f3ffc3a3fca9.herokuapp.com';
-// Fast API
-export const STAGING_BASE_URL = 'https://tax-app-api-dev-004c410e86db.herokuapp.com/';
-
 export const VERCEL_BASE_URL = 'https://irs-copilot.vercel.app';
-
 
 // export const USER_ID = 'cefece6f-3a77-493c-b'; // PROD
 // export const CONVERSATION_ID = '7ba4cca9-4115-4a5d-a'; // PROD
