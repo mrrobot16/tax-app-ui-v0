@@ -10,6 +10,7 @@ export function MessagesList(
   {
     messages,
     loading,
+    delay,
   }: MessagesListProps) {
   return (
     <div data-id="MessageList" style={styles.messageList as CSSProperties}>
@@ -39,7 +40,7 @@ export function MessagesList(
                       isLoading ? (
                         <LoadingDots color="#000" />
                       ) : (
-                        isAssistantMessage ? <Typewriter content={message.content} delay={1} /> : <div dangerouslySetInnerHTML={{ __html: message.content }} />
+                        isAssistantMessage ? <Typewriter content={message.content} delay={delay} /> : <div dangerouslySetInnerHTML={{ __html: message.content }} />
                       )
                     }
                   </div>
