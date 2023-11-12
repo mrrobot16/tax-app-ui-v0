@@ -30,6 +30,9 @@ const firebaseConfigDev = {
 
 const firebaseConfig = APP_ENV === 'production' ? firebaseConfigProd : firebaseConfigDev;
 
+console.log('APP_ENV', APP_ENV);
+console.log('firebaseConfig', firebaseConfig);
+
 // Initialize Firebase
 export const initFirebase = initializeApp(firebaseConfig);
 export const analytics = getAnalytics(initFirebase);
