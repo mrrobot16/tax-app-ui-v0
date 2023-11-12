@@ -50,8 +50,6 @@ export function Chat() {
     if(userId) {
       const user = await getUser(userId);
 
-      console.log('if userId: ', user);
-
       const conversation = user?.data.conversations[0];
 
       if(conversation) setConversationId(conversation.id);
@@ -63,7 +61,6 @@ export function Chat() {
       const user = await newUser();
       const userId = user?.data.id;
 
-      console.log('if !userId', user);
       setUserIdLocalStorage(userId);
       setUserId(userId);
     }
