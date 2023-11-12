@@ -14,9 +14,15 @@ export function setUserIdLocalStorage(userId: string): void {
     return localStorage.getItem('local_conversation_id');
   }
 
+  export function clearUserIdLocalStorage(): void {
+    localStorage.removeItem('local_user_id');
+  }
+
+  export function clearConversationIdLocalStorage(): void {
+    localStorage.removeItem('local_conversation_id');
+  }
+
   export function clearLocalStorage(): void {
     localStorage.clear();
-    setUserIdLocalStorage('');
-    setConversationIdLocalStorage('');
     console.log('Local storage cleared');
   }
