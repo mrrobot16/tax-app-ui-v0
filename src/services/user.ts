@@ -3,12 +3,15 @@ import { API_BASE_URL } from 'config/app';
 import { createRandomUser } from 'utils/auth';
 import { User } from 'types';
 
-export async function newUser(user: User = createRandomUser()) {
+export async function newUser(newUser: User = createRandomUser()) {
     try {
         const url = `${API_BASE_URL}/users/new`;
-        const user = createRandomUser();
+
+        console.log('newUser', newUser);
+
         const body = {
-            ...user,
+            ...newUser,
+
         };
         const response = await axios.post(url, body);
 

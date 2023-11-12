@@ -50,7 +50,7 @@ export function Chat() {
     if(userId) {
       const user = await getUser(userId);
 
-      console.log('user: ', user);
+      console.log('if userId: ', user);
 
       const conversation = user?.data.conversations[0];
 
@@ -62,6 +62,7 @@ export function Chat() {
     if(!userId) {
       const user = await newUser();
 
+      console.log('if !userId', user);
       setUserIdLocalStorage(user?.data.id);
     }
   }, []);
