@@ -10,12 +10,11 @@ export function MessagesList(
   {
     messages,
     loading,
-    delay,
   }: MessagesListProps) {
   return (
     <div data-id="MessageList" style={styles.messageList as CSSProperties}>
         {
-          messages.map((message: Message, index: number) => {
+          messages.map((message: Message & {isNew?: boolean}, index: number) => {
             const isLoading = loading && index === messages.length - 1;
             const isAssistantMessage = message.role === 'assistant';
             const userMessageStyle = {...styles.messageItem, ...styles.userMessage};
@@ -40,7 +39,7 @@ export function MessagesList(
                       isLoading ? (
                         <LoadingDots color="#000" />
                       ) : (
-                        isAssistantMessage ? <Typewriter content={message.content} delay={delay} /> : <div dangerouslySetInnerHTML={{ __html: message.content }} />
+                        isAssistantMessage && message.isNew ? <Typewriter content={message.content} delay={1} /> : <div dangerouslySetInnerHTML={{ __html: message.content }} />
                       )
                     }
                   </div>

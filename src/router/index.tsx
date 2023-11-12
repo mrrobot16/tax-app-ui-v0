@@ -3,7 +3,7 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 
-import { Chat, ChatV2 } from 'containers';
+import { Chat } from 'containers';
 
 
 export const routes = [
@@ -14,10 +14,6 @@ export const routes = [
   {
     path: '/chat',
     element: <Chat />,
-  },
-  {
-    path: '/v2',
-    element: <ChatV2 />,
   },
 ];
 

@@ -18,7 +18,6 @@ export function Chat() {
   const [conversationId, setConversationId] = useState<string | null | undefined>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null | AxiosError>(null);
-  const [delay, setDelay] = useState<number>(0);
   const [codeRed, setCodeRed] = useState(false);
   const hasMounted = useRef(false);
 
@@ -53,8 +52,6 @@ export function Chat() {
 
       const conversation = user?.data.conversations[0];
 
-      console.log('conversation', conversation);
-
       if(conversation.messages && conversation.messages.length > 0) {
         const setNewMessages = (prevMessageList: Message[]) => [
           ...prevMessageList,
@@ -62,7 +59,6 @@ export function Chat() {
         ];
 
         setMessageList(setNewMessages);
-        setDelay(1);
       }
 
       if(conversation) setConversationId(conversation.id);
@@ -153,23 +149,24 @@ export function Chat() {
 
     setMessageList(setNewMessage);
 
-    let response;
-
     if(conversationId) {
-      response = await newMessageChatCompletion(userId as string, conversationId, newMessage);
+      const response = await newMessageChatCompletion(userId as string, conversationId, newMessage);
 
       const { content, role } = response.data.api.message;
       const assistantMessage = {
         content,
         role,
+        isNew: true,
       };
 
       setUpdatedMessage(assistantMessage);
       setLoading(false);
+
+      if (response && codeRed || errorMessage) clearErrorMessages();
     }
 
     if(!conversationId) {
-      response = await newConversationChatCompletionMessageV1(userId as string, newMessage);
+      const response = await newConversationChatCompletionMessageV1(userId as string, newMessage);
 
       const { content, role } = response.data.api.message;
       const assistantMessage = {
@@ -179,10 +176,8 @@ export function Chat() {
 
       setUpdatedMessage(assistantMessage);
       setLoading(false);
-    }
 
-    if(response && codeRed || errorMessage) {
-      clearErrorMessages();
+      if (response && codeRed || errorMessage) clearErrorMessages();
     }
   };
 
@@ -193,7 +188,7 @@ export function Chat() {
       <h1 className={classNames.title} style={{ color: codeRed ? 'red' : 'inherit' }}>Chat with Tax App</h1>
       <main style={styles.main}>
         <div className="MessageListContainer" style={styles.messageListContainer}>
-            <MessagesList messages={messageList} loading={loading} delay={delay}/>
+            <MessagesList messages={messageList} loading={loading} />
         </div>
         <div className="SendMessageContainer" style={styles.sendMessageContainer as CSSProperties}>
           <SendMessagesForm codeRed={codeRed} loading={loading} sendMessage={sendMessageV1} />
