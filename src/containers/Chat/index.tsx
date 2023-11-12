@@ -18,6 +18,7 @@ export function Chat() {
   const [conversationId, setConversationId] = useState<string | null | undefined>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null | AxiosError>(null);
+  const [delay, setDelay] = useState<number>(0);
   const [codeRed, setCodeRed] = useState(false);
   const hasMounted = useRef(false);
 
@@ -51,6 +52,18 @@ export function Chat() {
       const user = await getUser(userId);
 
       const conversation = user?.data.conversations[0];
+
+      console.log('conversation', conversation);
+
+      if(conversation.messages && conversation.messages.length > 0) {
+        const setNewMessages = (prevMessageList: Message[]) => [
+          ...prevMessageList,
+          ...conversation.messages,
+        ];
+
+        setMessageList(setNewMessages);
+        setDelay(1);
+      }
 
       if(conversation) setConversationId(conversation.id);
 
@@ -180,7 +193,7 @@ export function Chat() {
       <h1 className={classNames.title} style={{ color: codeRed ? 'red' : 'inherit' }}>Chat with Tax App</h1>
       <main style={styles.main}>
         <div className="MessageListContainer" style={styles.messageListContainer}>
-            <MessagesList messages={messageList} loading={loading} />
+            <MessagesList messages={messageList} loading={loading} delay={delay}/>
         </div>
         <div className="SendMessageContainer" style={styles.sendMessageContainer as CSSProperties}>
           <SendMessagesForm codeRed={codeRed} loading={loading} sendMessage={sendMessageV1} />
