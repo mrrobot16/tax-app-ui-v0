@@ -113,7 +113,8 @@ module.exports = {
     'class-methods-use-this': 0, // specify the maximum cyclomatic complexity allowed in a program
     'complexity': [0, 11], // require return statements to either always or never specify values
     'consistent-return': 0, // specify curly brace conventions for all control statements
-    'curly': [2, 'all'], // require default case in switch statements
+    // 'curly': [2, 'all'], // require default case in switch statements
+    'curly': 'off',
     'default-case': 0, // enforce default clauses in switch statements to be last
     'default-case-last': 2, // enforce default parameters to be last
     'default-param-last': 0, // encourages use of dot notation whenever possible
