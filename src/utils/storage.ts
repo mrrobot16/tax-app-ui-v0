@@ -13,3 +13,10 @@ export function setUserIdLocalStorage(userId: string): void {
   export function getConversationIdLocalStorage(): string | null {
     return localStorage.getItem('local_conversation_id');
   }
+
+  export function clearLocalStorage(): void {
+    localStorage.clear();
+    setUserIdLocalStorage('');
+    setConversationIdLocalStorage('');
+    console.log('Local storage cleared');
+  }
