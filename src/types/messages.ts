@@ -8,6 +8,7 @@ export type MessagesListProps = {
     loading: boolean;
     messages: Message[];
     assistantLoadingMessage?: Message;
+    delay: number;
 }
 
 export type SendMessagesProps = {
