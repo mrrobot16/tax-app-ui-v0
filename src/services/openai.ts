@@ -108,3 +108,63 @@ export async function newConversationMessageV1(
         throw error;
     }
 }
+
+export async function newConversationChatCompletionMessageV1(
+    user_id: string,
+    message: Message,
+    callback?: (error?: string | null | boolean | Error | unknown) => void
+) {
+    try {
+        const url = `${API_BASE_URL}/conversations/new/message/chat-completion`;
+        const body = {
+            conversation: {
+                user_id,
+            },
+            message: {
+                ...message,
+                user_id,
+            },
+        };
+        const response = await axios.post(url, body);
+
+        return response;
+    } catch (error: AxiosError | unknown) {
+        console.error('Error with openai/chat-completion', error);
+
+        if(callback) {
+            callback(error);
+        }
+
+        throw error;
+    }
+}
+
+export async function newMessageChatCompletion(
+    user_id: string,
+    conversation_id: string,
+    message: Message,
+    callback?: (error?: string | null | boolean | Error | unknown) => void
+) {
+    try {
+        const url = `${API_BASE_URL}/conversations/message/chat-completion`;
+        const body = {
+            user_id,
+            conversation_id,
+            ...message,
+        };
+
+        console.log('body', body);
+
+        const response = await axios.post(url, body);
+
+        return response;
+    } catch (error) {
+        console.error('Error with openai/chat-completion', error);
+
+        if(callback) {
+            callback(error);
+        }
+
+        throw error;
+    }
+}
