@@ -61,9 +61,11 @@ export function Chat() {
 
     if(!userId) {
       const user = await newUser();
+      const userId = user?.data.id;
 
       console.log('if !userId', user);
-      setUserIdLocalStorage(user?.data.id);
+      setUserIdLocalStorage(userId);
+      setUserId(userId);
     }
   }, []);
 
