@@ -1,20 +1,21 @@
 
 import { CSSProperties, useState, useEffect, useRef, useCallback } from 'react';
+import { AxiosError } from 'axios';
 
 import 'containers/Chat/styles.css';
 import { ChatContainerStyling } from 'containers/Chat/styles';
 import { MessagesList, SendMessagesForm, ErrorMessage } from 'components';
-import { MESSAGES_LIST, USER_ID, CONVERSATION_ID, ASSISTANT_LOADING_MESSAGE } from 'utils/constants';
+import { MESSAGES_LIST, ASSISTANT_LOADING_MESSAGE } from 'utils/constants';
 import { Message } from 'types';
-import { newConversationWithOpenai, newConversationMessage, openAIStatus, apiStatus, newConversationMessageV1 } from 'services';
-import { AxiosError } from 'axios';
+import { getUser, newUser, newMessageChatCompletion, newConversationChatCompletionMessageV1, openAIStatus, apiStatus } from 'services';
+import { getUserIdLocalStorage, setUserIdLocalStorage } from 'utils/storage';
 
 const { classNames, styles } = ChatContainerStyling;
 
 export function Chat() {
   const [messageList, setMessageList] = useState<Message[]>(MESSAGES_LIST);
-  const [userId, setUserId] = useState<string | null>(USER_ID);
-  const [conversationId, setConversationId] = useState<string | null>(CONVERSATION_ID);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [conversationId, setConversationId] = useState<string | null | undefined>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null | AxiosError>(null);
   const [codeRed, setCodeRed] = useState(false);
@@ -42,6 +43,28 @@ export function Chat() {
     setCodeRed(false);
     setErrorMessage(null);
   };
+
+  const checkLocalUserId = useCallback(async () => {
+    const userId = getUserIdLocalStorage();
+
+    if(userId) {
+      const user = await getUser(userId);
+
+      console.log('user: ', user);
+
+      const conversation = user?.data.conversations[0];
+
+      if(conversation) setConversationId(conversation.id);
+
+      setUserId(userId);
+    }
+
+    if(!userId) {
+      const user = await newUser();
+
+      setUserIdLocalStorage(user?.data.id);
+    }
+  }, []);
 
   const checkOpenAIStatus = useCallback(async () => {
     const health = await openAIStatus(setStatusErrorMessages);
@@ -93,66 +116,11 @@ export function Chat() {
     });
   };
 
-  const sendMessage = async (message: Message) => {
-    setLoading(true);
-
-    const newMessage = {
-      content: message.content,
-      role: message.role,
-    };
-
-    const setNewMessage = (prevMessageList: Message[]) => [
-      ...prevMessageList,
-      newMessage,
-      ASSISTANT_LOADING_MESSAGE,
-    ];
-
-    setMessageList(setNewMessage);
-
-    if(!conversationId) {
-      const response = await newConversationWithOpenai(userId, newMessage);
-      const openaiResponse = response?.data.openai_message;
-      const { content, role, conversation_id } = openaiResponse;
-      const assistantMessage = {
-        content,
-        role,
-      };
-
-      setConversationId(conversation_id);
-      setUpdatedMessage(assistantMessage);
-      setLoading(false);
-    }
-
-    if(conversationId && userId) {
-      try {
-        const response = await newConversationMessage(userId, conversationId, newMessage, handleError);
-        const openaiResponse = response?.data.openai_message;
-        const { content, role, conversation_id } = openaiResponse;
-        const assistantMessage = {
-          content,
-          role,
-        };
-
-        setUpdatedMessage(assistantMessage);
-        setLoading(false);
-
-        if(response && codeRed || errorMessage) {
-          clearErrorMessages();
-        }
-      } catch (error) {
-        setUpdatedMessage({
-          content: 'Sorry, message not sent. Please try again',
-          role: 'assistant',
-        });
-        console.error(error);
-      }
-    }
-  };
-
   const componentDidMount = () => {
     if (!hasMounted.current) { // Checking if the component has not mounted
       checkAPIStatus();
       checkOpenAIStatus();
+      checkLocalUserId();
       hasMounted.current = true; // Updating the ref value after the initial mount
     }
   };
@@ -161,8 +129,7 @@ export function Chat() {
     setLoading(true);
 
     const newMessage = {
-      content: message.content,
-      role: message.role,
+      ...message,
     };
 
     const setNewMessage = (prevMessageList: Message[]) => [
@@ -173,22 +140,40 @@ export function Chat() {
 
     setMessageList(setNewMessage);
 
-    const response = await newConversationMessageV1(newMessage);
-    const { content, role } = response.data.message;
-    const assistantMessage = {
-      content,
-      role,
-    };
+    let response;
 
-    setUpdatedMessage(assistantMessage);
-    setLoading(false);
+    if(conversationId) {
+      response = await newMessageChatCompletion(userId as string, conversationId, newMessage);
+
+      const { content, role } = response.data.api.message;
+      const assistantMessage = {
+        content,
+        role,
+      };
+
+      setUpdatedMessage(assistantMessage);
+      setLoading(false);
+    }
+
+    if(!conversationId) {
+      response = await newConversationChatCompletionMessageV1(userId as string, newMessage);
+
+      const { content, role } = response.data.api.message;
+      const assistantMessage = {
+        content,
+        role,
+      };
+
+      setUpdatedMessage(assistantMessage);
+      setLoading(false);
+    }
 
     if(response && codeRed || errorMessage) {
       clearErrorMessages();
     }
   };
 
-  useEffect(componentDidMount, [checkOpenAIStatus, checkAPIStatus]);
+  useEffect(componentDidMount, [checkOpenAIStatus, checkAPIStatus, checkLocalUserId]);
 
   return (
     <div className={classNames.container}>
