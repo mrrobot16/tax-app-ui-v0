@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@faker-js/faker": "^8.2.0",
-    "@sentry/cli": "^2.21.2",
+    "@sentry/cli": "^2.21.3",
     "@sentry/react": "^7.74.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
@@ -46,7 +46,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint '**/*.ts' '**/*.tsx'",
-    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org irs-copilot --project irs-copilot-ui ./build/static/js && sentry-cli sourcemaps upload --org irs-copilot --project irs-copilot-ui ./build/static/js"
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org taxapp --project taxapp-ui-prod ./build && sentry-cli sourcemaps upload --org taxapp --project taxapp-ui-prod ./build"
   },
   "eslintConfig": {
     "extends": [
