@@ -5,7 +5,7 @@ import 'containers/Chat/styles.css';
 import { ChatContainerStyling } from 'containers/Chat/styles';
 import { ErrorMessage } from 'components';
 import { getUser,openAIStatus, apiStatus } from 'services';
-import { getUserIdLocalStorage } from 'utils/storage';
+import { getUserIdLocalStorage, clearLocalStorage } from 'utils/storage';
 
 const { classNames, styles } = ChatContainerStyling;
 
@@ -95,6 +95,10 @@ export function Test() {
       <main style={styles.main}>
         <div className="SendMessageContainer" style={styles.sendMessageContainer as CSSProperties}>
             <button type="button" onClick={() => methodDoesNotExist()}>Break the world</button>
+        </div>
+
+        <div className="SendMessageContainer" style={styles.sendMessageContainer as CSSProperties}>
+            <button type="button" onClick={() => clearLocalStorage()}>Clear local storage</button>
         </div>
         { codeRed && <ErrorMessage error={errorMessage} /> }
       </main>
