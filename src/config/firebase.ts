@@ -3,9 +3,6 @@ import { getAnalytics } from 'firebase/analytics';
 
 import { APP_ENV } from 'utils/constants';
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
 const firebaseConfigProd = {
   apiKey: 'AIzaSyAg-VpiII4IwmBH0jjiq8yC3p-DSlXyTKE',
   authDomain: 'tax-app-prod-35a06.firebaseapp.com',
@@ -15,7 +12,6 @@ const firebaseConfigProd = {
   appId: '1:64026493068:web:4bb5293a13b1c65d04fba9',
   measurementId: 'G-0BZT2XP96Y',
 };
-
 
 const firebaseConfigDev = {
   apiKey: 'AIzaSyA93YAYtmidH6IvkyCVTGHCDKkFfyo_TEA',
@@ -29,9 +25,6 @@ const firebaseConfigDev = {
 };
 
 const firebaseConfig = APP_ENV === 'production' ? firebaseConfigProd : firebaseConfigDev;
-
-console.log('APP_ENV', APP_ENV);
-console.log('firebaseConfig', firebaseConfig);
 
 // Initialize Firebase
 export const initFirebase = initializeApp(firebaseConfig);

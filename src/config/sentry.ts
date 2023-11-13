@@ -6,6 +6,10 @@ import {
   VERCEL_BASE_URL,
 } from 'utils/constants';
 
+import {
+  APP_ENV,
+} from 'config/app';
+
 const tracePropagationTargets = [
     'localhost',
     STAGING_BASE_URL,
@@ -13,7 +17,9 @@ const tracePropagationTargets = [
     VERCEL_BASE_URL,
 ];
 
-const dsn = 'https://f60a145bdf46090a2f22c3fdcf223dd4@o4506084321984512.ingest.sentry.io/4506084330700800';
+const DSN_PROD = 'https://5ecf9a0bd5d2f716e11e7bc668906cdf@o4506084321984512.ingest.sentry.io/4506215997308928';
+const DSN_DEV = 'https://f60a145bdf46090a2f22c3fdcf223dd4@o4506084321984512.ingest.sentry.io/4506084330700800';
+const dsn = APP_ENV === 'production' ? DSN_PROD : DSN_DEV;
 const integrations = [
   new Sentry.BrowserTracing({
     // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
