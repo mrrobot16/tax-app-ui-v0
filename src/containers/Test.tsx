@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import { CSSProperties, useState, useEffect, useRef, useCallback } from 'react';
 import { AxiosError } from 'axios';
 
