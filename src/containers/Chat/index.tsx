@@ -51,8 +51,9 @@ export function Chat() {
       const user = await getUser(userId);
 
       const conversation = user?.data.conversations[0];
+      const conversationExists = conversation && conversation.messages && conversation.messages.length > 0;
 
-      if(conversation.messages && conversation.messages.length > 0) {
+      if(conversationExists) {
         const setNewMessages = (prevMessageList: Message[]) => [
           ...prevMessageList,
           ...conversation.messages,
