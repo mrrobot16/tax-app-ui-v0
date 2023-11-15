@@ -32,11 +32,27 @@ export function Chat() {
   const createUser = async () => {
     clearUserIdLocalStorage();
 
-    const user = await newUser();
-    const userId = user?.data.id;
+    try {
+      const user = await newUser();
+      const userId = user?.data.id;
 
-    setUserIdLocalStorage(userId);
-    setUserId(userId);
+      setUserIdLocalStorage(userId);
+      setUserId(userId);
+    } catch (error: AxiosError | unknown) {
+        if(isAxiosError(error)) {
+          const message = error.response?.data.detail;
+
+          setCodeRed(true);
+          setErrorMessage(message);
+        } else {
+          console.error('An unknown error occurred: ', error);
+
+          const message = `An unknown error occurred while creating your user`;
+
+          setCodeRed(true);
+          setErrorMessage(message);
+        }
+    }
   };
 
   const getUserById = async (userId: string) => {

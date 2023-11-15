@@ -4,9 +4,7 @@ import { createRandomUser } from 'utils/auth';
 import { User } from 'types';
 
 export async function newUser(newUser: User = createRandomUser()) {
-    try {
         const url = `${API_BASE_URL}/users/new`;
-
         const body = {
             ...newUser,
 
@@ -14,9 +12,6 @@ export async function newUser(newUser: User = createRandomUser()) {
         const response = await axios.post(url, body);
 
         return response;
-    } catch (error) {
-        console.error('Error with new conversation with openai', error);
-    }
 }
 
 export async function getUser(id: string) {
