@@ -1,42 +1,27 @@
 
 import { CSSProperties, useState, useEffect, useRef, useCallback } from 'react';
-import { AxiosError } from 'axios';
+import { AxiosError, isAxiosError } from 'axios';
 
 import 'containers/Chat/styles.css';
-import { ChatContainerStyling } from 'containers/Chat/styles';
+import { classNames, styles } from 'containers/Chat/styles';
 import { MessagesList, SendMessagesForm, ErrorMessage } from 'components';
-import { MESSAGES_LIST, ASSISTANT_LOADING_MESSAGE } from 'utils/constants';
+import { MESSAGES_LIST, ASSISTANT_LOADING_MESSAGE, STATUS_ERROR_MESSAGES, OPENAI_STATUS_500_ERROR_MESSAGE, OPENAI_STATUS_503_ERROR_MESSAGE, API_STATUS_500_ERROR_MESSAGE } from 'utils/constants';
 import { Message } from 'types';
 import { getUser, newUser, newMessageChatCompletion, newConversationChatCompletionMessageV1, openAIStatus, apiStatus } from 'services';
-import { getUserIdLocalStorage, setUserIdLocalStorage } from 'utils/storage';
-
-const { classNames, styles } = ChatContainerStyling;
+import { clearLocalStorage, getUserIdLocalStorage, setUserIdLocalStorage } from 'utils/storage';
 
 export function Chat() {
   const [messageList, setMessageList] = useState<Message[]>(MESSAGES_LIST);
   const [userId, setUserId] = useState<string | null>(null);
   const [conversationId, setConversationId] = useState<string | null | undefined>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string | null | AxiosError>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [codeRed, setCodeRed] = useState(false);
   const hasMounted = useRef(false);
 
-  const handleError = (error?: string | null | boolean | Error | unknown) => {
-    setErrorMessage(`
-    We apologize for the inconvenience, our system is having load issues. 
-    Our team is working to improve performance try again in a few minutes.
-    Thank you for your patience.
-    `);
-    setCodeRed(true);
-    setLoading(false);
-  };
-
   const setStatusErrorMessages = (error?: string | AxiosError | unknown) => {
     setCodeRed(true);
-    setErrorMessage(`
-    We apologize for the inconvenience, our system is undergoing maintenance to improve your experience. 
-    Thank you for your patience.
-    `);
+    setErrorMessage(STATUS_ERROR_MESSAGES);
   };
 
   const clearErrorMessages = () => {
@@ -44,12 +29,19 @@ export function Chat() {
     setErrorMessage(null);
   };
 
-  const checkLocalUserId = useCallback(async () => {
-    const userId = getUserIdLocalStorage();
+  const createUser = async () => {
+    clearLocalStorage();
 
-    if(userId) {
+    const user = await newUser();
+    const userId = user?.data.id;
+
+    setUserIdLocalStorage(userId);
+    setUserId(userId);
+  };
+
+  const getUserById = async (userId: string) => {
+    try {
       const user = await getUser(userId);
-
       const conversation = user?.data.conversations[0];
       const conversationExists = conversation && conversation.messages && conversation.messages.length > 0;
 
@@ -65,54 +57,55 @@ export function Chat() {
       if(conversation) setConversationId(conversation.id);
 
       setUserId(userId);
-    }
+    } catch (error: AxiosError | unknown) {
+        if (isAxiosError(error)) {
+          const message = error.response?.data.detail;
 
-    if(!userId) {
-      const user = await newUser();
-      const userId = user?.data.id;
+          setCodeRed(true);
+          setErrorMessage(message);
+      } else {
+          console.error('An unknown error occurred: ', error);
 
-      setUserIdLocalStorage(userId);
-      setUserId(userId);
+          const message = `An unknown error occurred while fetching your user`;
+
+          setCodeRed(true);
+          setErrorMessage(message);
+      }
     }
+  };
+
+  const getUserByLocalStorageId = useCallback(async () => {
+    const userId = getUserIdLocalStorage();
+    const checkUserId = typeof userId === 'string' && userId.length === 20;
+
+    if(checkUserId) getUserById(userId);
+
+    if(!checkUserId) createUser();
   }, []);
 
-  const checkOpenAIStatus = useCallback(async () => {
+  const getOpenAIStatus = useCallback(async () => {
     const health = await openAIStatus(setStatusErrorMessages);
 
-    if(health.status === 200) {
-      console.log('All good with OpenAI api health: ', health);
-    }
+    if(health.status === 200) console.log('All good with OpenAI api health: ', health);
 
     if(health.status === 500 || health.status === 503) {
       setCodeRed(true);
       console.log('Something wrong with OpenAI API health: ', health);
 
-      const message = health.status === 500 ? `
-      We apologize for the inconvenience, our system is undergoing scheduled maintenance. 
-      Thank you for your patience.
-      ` : health.status === 503 ? `
-      We apologize for the inconvenience, our app is undergoing scheduled maintenance. 
-      Thank you for your patience.
-      ` : null;
+      const message = health.status === 500 ? OPENAI_STATUS_500_ERROR_MESSAGE : health.status === 503 ? OPENAI_STATUS_503_ERROR_MESSAGE : null;
 
       setErrorMessage(message);
     }
   }, []);
 
-  const checkAPIStatus = useCallback(async () => {
-    const health = await apiStatus(setStatusErrorMessages);
+  const getAPIStatus = useCallback(async () => {
+    const health = await apiStatus();
 
-    if(health.status === 200) {
-      console.log('All good with API health: ', health);
-    }
-
-    if(health.status === 500) {
+    if(health.status === 200) console.log('All good with API health: ', health);
+    else if (health.status === 500) {
       setCodeRed(true);
       console.log('Something wrong with API health: ', health);
-      setErrorMessage(`
-      We apologize for the inconvenience, our platform is undergoing scheduled maintenance. 
-      Thank you for your patience.
-      `);
+      setErrorMessage(API_STATUS_500_ERROR_MESSAGE);
     }
   }, []);
 
@@ -124,15 +117,6 @@ export function Chat() {
 
       return updatedMessages;
     });
-  };
-
-  const componentDidMount = () => {
-    if (!hasMounted.current) { // Checking if the component has not mounted
-      checkAPIStatus();
-      checkOpenAIStatus();
-      checkLocalUserId();
-      hasMounted.current = true; // Updating the ref value after the initial mount
-    }
   };
 
   const sendMessageV1 = async (message: Message) => {
@@ -182,7 +166,14 @@ export function Chat() {
     }
   };
 
-  useEffect(componentDidMount, [checkOpenAIStatus, checkAPIStatus, checkLocalUserId]);
+  const componentDidMount = () => {
+    if (!hasMounted.current) { // Checking if the component has not mounted
+      Promise.all([getOpenAIStatus(), getAPIStatus(), getUserByLocalStorageId()]);
+      hasMounted.current = true; // Updating the ref value after the initial mount
+    }
+  };
+
+  useEffect(componentDidMount, [getOpenAIStatus, getAPIStatus, getUserByLocalStorageId]);
 
   return (
     <div className={classNames.container}>
@@ -194,7 +185,7 @@ export function Chat() {
         <div className="SendMessageContainer" style={styles.sendMessageContainer as CSSProperties}>
           <SendMessagesForm codeRed={codeRed} loading={loading} sendMessage={sendMessageV1} />
         </div>
-        { codeRed && <ErrorMessage error={errorMessage} /> }
+        { (codeRed) && <ErrorMessage message={errorMessage} /> }
       </main>
     </div>
   );

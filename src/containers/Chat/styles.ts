@@ -5,10 +5,6 @@ const classNames = {
 
 const styles = {
     main: {
-      // display: 'flex',
-      // FlexDirection: 'column',
-      // justifyContent: 'space-between',
-      // alignItems: 'center',
       padding: '1rem',
     },
     messageListContainer: {
@@ -31,7 +27,4 @@ const styles = {
     },
 };
 
-export const ChatContainerStyling = {
-    classNames,
-    styles,
-};
+export { classNames, styles };
