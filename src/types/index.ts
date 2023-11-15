@@ -4,3 +4,4 @@ export * from 'types/assets';
 export * from 'types/messages';
 export * from 'types/common';
 export * from 'types/conversation';
+export * from 'types/openai';

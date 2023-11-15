@@ -1,6 +1,6 @@
 import axios, { Axios, AxiosError } from 'axios';
 import { API_BASE_URL } from 'config/app';
-import { Message } from 'types';
+import { Message, openAIStatusCallback } from 'types';
 
 export async function newConversationWithOpenai(
     user_id: string | null,
@@ -45,10 +45,6 @@ export async function newConversationMessage(
 
         throw error;
     }
-}
-
-type openAIStatusCallback = {
-    (error?: string | AxiosError | unknown): void;
 }
 
 export async function openAIStatus(callback: openAIStatusCallback) : Promise<{ status: number | undefined, error?: AxiosError }> {
