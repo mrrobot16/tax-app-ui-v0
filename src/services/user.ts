@@ -7,8 +7,6 @@ export async function newUser(newUser: User = createRandomUser()) {
     try {
         const url = `${API_BASE_URL}/users/new`;
 
-        console.log('newUser', newUser);
-
         const body = {
             ...newUser,
 
@@ -22,12 +20,8 @@ export async function newUser(newUser: User = createRandomUser()) {
 }
 
 export async function getUser(id: string) {
-    try {
         const url = `${API_BASE_URL}/users/${id}`;
         const response = await axios.get(url);
 
         return response;
-    } catch (error) {
-        console.error('Error with new conversation with openai', error);
-    }
 }

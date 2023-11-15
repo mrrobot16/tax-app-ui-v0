@@ -9,8 +9,6 @@ export async function newConversation(user_id: string) {
         };
         const response = await axios.post(url, body);
 
-        console.log('response', response);
-
         return response;
     } catch (error) {
         console.error('Error with new conversation with openai', error);
@@ -24,8 +22,6 @@ export async function getConversationByUsers(user_id: string) {
             user_id,
         };
         const response = await axios.post(url, body);
-
-        console.log('response', response);
 
         return response;
     } catch (error) {

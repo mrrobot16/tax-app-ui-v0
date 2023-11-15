@@ -68,7 +68,7 @@ export async function openAIStatus(callback: openAIStatusCallback) : Promise<{ s
     }
 }
 
-export async function apiStatus(callback?: (message: string) => void) {
+export async function apiStatus() {
     try {
         const url = `${API_BASE_URL}/`;
         const response = await axios.get(url);
@@ -152,8 +152,6 @@ export async function newMessageChatCompletion(
             conversation_id,
             ...message,
         };
-
-        console.log('body', body);
 
         const response = await axios.post(url, body);
 

@@ -2,19 +2,17 @@ import { CSSProperties, useState, useEffect, useRef, useCallback } from 'react';
 import { AxiosError } from 'axios';
 
 import 'containers/Chat/styles.css';
-import { ChatContainerStyling } from 'containers/Chat/styles';
+import { classNames, styles } from 'containers/Chat/styles';
 import { ErrorMessage } from 'components';
 import { getUser,openAIStatus, apiStatus } from 'services';
 import { getUserIdLocalStorage, clearLocalStorage } from 'utils/storage';
-
-const { classNames, styles } = ChatContainerStyling;
 
 const methodDoesNotExist = (): void => {
     throw new Error('Function not implemented.');
 };
 
 export function Test() {
-  const [errorMessage, setErrorMessage] = useState<string | null | AxiosError>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [codeRed, setCodeRed] = useState(false);
   const hasMounted = useRef(false);
 
@@ -62,7 +60,7 @@ export function Test() {
   }, []);
 
   const checkAPIStatus = useCallback(async () => {
-    const health = await apiStatus(setStatusErrorMessages);
+    const health = await apiStatus();
 
     if(health.status === 200) {
       console.log('All good with API health: ', health);
@@ -100,7 +98,7 @@ export function Test() {
         <div className="SendMessageContainer" style={styles.sendMessageContainer as CSSProperties}>
             <button type="button" onClick={() => clearLocalStorage()}>Clear local storage</button>
         </div>
-        { codeRed && <ErrorMessage error={errorMessage} /> }
+        { codeRed && <ErrorMessage message={errorMessage} /> }
       </main>
     </div>
   );
