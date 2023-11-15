@@ -8,7 +8,7 @@ import { MessagesList, SendMessagesForm, ErrorMessage } from 'components';
 import { MESSAGES_LIST, ASSISTANT_LOADING_MESSAGE, STATUS_ERROR_MESSAGES, OPENAI_STATUS_500_ERROR_MESSAGE, OPENAI_STATUS_503_ERROR_MESSAGE, API_STATUS_500_ERROR_MESSAGE } from 'utils/constants';
 import { Message } from 'types';
 import { getUser, newUser, newMessageChatCompletion, newConversationChatCompletionMessageV1, openAIStatus, apiStatus } from 'services';
-import { clearLocalStorage, getUserIdLocalStorage, setUserIdLocalStorage } from 'utils/storage';
+import { clearUserIdLocalStorage, getUserIdLocalStorage, setUserIdLocalStorage } from 'utils/storage';
 
 export function Chat() {
   const [messageList, setMessageList] = useState<Message[]>(MESSAGES_LIST);
@@ -30,7 +30,7 @@ export function Chat() {
   };
 
   const createUser = async () => {
-    clearLocalStorage();
+    clearUserIdLocalStorage();
 
     const user = await newUser();
     const userId = user?.data.id;
