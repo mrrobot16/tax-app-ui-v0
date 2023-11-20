@@ -55,7 +55,7 @@ export function Chat() {
     }
   };
 
-  const getUserById = async (userId: string) => {
+  const getUserById = useCallback(async (userId: string) => {
     try {
       const user = await getUser(userId);
       const conversation = user?.data.conversations[0];
@@ -75,7 +75,15 @@ export function Chat() {
       setUserId(userId);
     } catch (error: AxiosError | unknown) {
         if (isAxiosError(error)) {
+          const status = error.response?.status;
           const message = error.response?.data.detail;
+
+          if(status === 404) {
+            clearUserIdLocalStorage();
+            createUser();
+
+            return;
+          }
 
           setCodeRed(true);
           setErrorMessage(message);
@@ -88,7 +96,7 @@ export function Chat() {
           setErrorMessage(message);
       }
     }
-  };
+  }, []);
 
   const getUserByLocalStorageId = useCallback(async () => {
     const userId = getUserIdLocalStorage();
@@ -97,7 +105,7 @@ export function Chat() {
     if(checkUserId) getUserById(userId);
 
     if(!checkUserId) createUser();
-  }, []);
+  }, [getUserById]);
 
   const getOpenAIStatus = useCallback(async () => {
     const health = await openAIStatus(setStatusErrorMessages);
