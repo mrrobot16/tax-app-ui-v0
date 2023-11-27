@@ -159,6 +159,8 @@ export function Chat() {
     setMessageList(setNewMessage);
 
     if(conversationId) {
+      console.log('if conversationId conversation_id: ', conversationId);
+
       const response = await newMessageChatCompletion(userId as string, conversationId, newMessage);
 
       const { content, role } = response.data.api.message;
@@ -175,6 +177,8 @@ export function Chat() {
     }
 
     if(!conversationId) {
+      console.log('if !conversationId conversation_id: ', conversationId);
+
       const response = await newConversationChatCompletionMessageV1(userId as string, newMessage);
 
       const { content, role } = response.data.api.message;
