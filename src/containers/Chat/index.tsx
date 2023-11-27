@@ -59,6 +59,9 @@ export function Chat() {
     try {
       const user = await getUser(userId);
       const conversation = user?.data.conversations[0];
+
+      console.log('conversation', conversation);
+
       const conversationExists = conversation && conversation.messages && conversation.messages.length > 0;
 
       if(conversationExists) {
@@ -102,9 +105,15 @@ export function Chat() {
     const userId = getUserIdLocalStorage();
     const checkUserId = typeof userId === 'string' && userId.length === 20;
 
-    if(checkUserId) getUserById(userId);
+    if(checkUserId) {
+      console.log('ifCheckUserId');
+      getUserById(userId);
+    }
 
-    if(!checkUserId) createUser();
+    if(!checkUserId) {
+      console.log('!ifCheckUserI');
+      createUser();
+    }
   }, [getUserById]);
 
   const getOpenAIStatus = useCallback(async () => {
