@@ -196,6 +196,7 @@ export function Chat() {
         role,
       };
 
+      console.log('response', response);
       setUpdatedMessage(assistantMessage);
       setLoading(false);
 
