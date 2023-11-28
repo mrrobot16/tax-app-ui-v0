@@ -189,14 +189,14 @@ export function Chat() {
       console.log('if !conversationId conversation_id: ', conversationId);
 
       const response = await newConversationChatCompletionMessageV1(userId as string, newMessage);
-
+      const { conversation_id } = response.data;
       const { content, role } = response.data.api.message;
       const assistantMessage = {
         content,
         role,
       };
 
-      console.log('response', response);
+      setConversationId(conversation_id);
       setUpdatedMessage(assistantMessage);
       setLoading(false);
 
