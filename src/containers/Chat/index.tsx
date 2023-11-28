@@ -60,7 +60,6 @@ export function Chat() {
       const user = await getUser(userId);
       const conversation = user?.data.conversations[0];
 
-      console.log('conversation', conversation);
 
       const conversationExists = conversation && conversation.messages && conversation.messages.length > 0;
 
@@ -106,12 +105,10 @@ export function Chat() {
     const checkUserId = typeof userId === 'string' && userId.length === 20;
 
     if(checkUserId) {
-      console.log('ifCheckUserId');
       getUserById(userId);
     }
 
     if(!checkUserId) {
-      console.log('!ifCheckUserI');
       createUser();
     }
   }, [getUserById]);
@@ -168,8 +165,6 @@ export function Chat() {
     setMessageList(setNewMessage);
 
     if(conversationId) {
-      console.log('if conversationId conversation_id: ', conversationId);
-
       const response = await newMessageChatCompletion(userId as string, conversationId, newMessage);
 
       const { content, role } = response.data.api.message;
@@ -186,8 +181,6 @@ export function Chat() {
     }
 
     if(!conversationId) {
-      console.log('if !conversationId conversation_id: ', conversationId);
-
       const response = await newConversationChatCompletionMessageV1(userId as string, newMessage);
       const { conversation_id } = response.data;
       const { content, role } = response.data.api.message;
