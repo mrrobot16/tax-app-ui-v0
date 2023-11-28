@@ -1,3 +1,11 @@
 .MessageListContainer a {
     color: #0075ff;
-  }
+}
+
+.MessageListContainer ul {
+  list-style: decimal
+}
+
+.MessageListContainer h2 {
+  font-size: 20px
+}
