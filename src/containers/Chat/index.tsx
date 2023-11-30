@@ -74,6 +74,7 @@ export function Chat() {
 
       if(conversation) setConversationId(conversation.id);
 
+      console.log('conversation.id', conversation.id);
       setUserId(userId);
     } catch (error: AxiosError | unknown) {
         if (isAxiosError(error)) {
