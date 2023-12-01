@@ -74,7 +74,6 @@ export function Chat() {
 
       if(conversation) setConversationId(conversation.id);
 
-      console.log('conversation.id', conversation.id);
       setUserId(userId);
     } catch (error: AxiosError | unknown) {
         if (isAxiosError(error)) {
@@ -184,9 +183,6 @@ export function Chat() {
     if(!conversationId) {
       const response = await newConversationChatCompletionMessageV1(userId as string, newMessage);
       const { conversation_id } = response.data;
-
-      console.log('conversation_id', conversation_id);
-
       const { content, role } = response.data.api.message;
       const assistantMessage = {
         content,
