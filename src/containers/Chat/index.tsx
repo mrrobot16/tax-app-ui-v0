@@ -5,7 +5,14 @@ import { AxiosError, isAxiosError } from 'axios';
 import 'containers/Chat/styles.css';
 import { classNames, styles } from 'containers/Chat/styles';
 import { MessagesList, SendMessagesForm, ErrorMessage } from 'components';
-import { MESSAGES_LIST, ASSISTANT_LOADING_MESSAGE, STATUS_ERROR_MESSAGES, OPENAI_STATUS_500_ERROR_MESSAGE, OPENAI_STATUS_503_ERROR_MESSAGE, API_STATUS_500_ERROR_MESSAGE } from 'utils/constants';
+import {
+  MESSAGES_LIST, ASSISTANT_LOADING_MESSAGE,
+  STATUS_ERROR_MESSAGES, OPENAI_STATUS_500_ERROR_MESSAGE,
+  OPENAI_STATUS_503_ERROR_MESSAGE, API_STATUS_500_ERROR_MESSAGE,
+  NETWORK_ERROR_MESSAGE, USER_UNKNOWN_ERROR_MESSAGE,
+  USER_FETCH_UNKNOW_ERROR_MESSAGE, USER_CREATE_UNKNOWN_ERROR_MESSAGE,
+  OPENAI_ERROR_MESSAGE, API_ERROR_MESSAGE, NETWORK_ERROR_CODE_MESSAGE,
+} from 'utils/constants';
 import { Message } from 'types';
 import { getUser, newUser, newMessageChatCompletion, newConversationChatCompletionMessageV1, openAIStatus, apiStatus } from 'services';
 import { clearUserIdLocalStorage, getUserIdLocalStorage, setUserIdLocalStorage } from 'utils/storage';
@@ -40,17 +47,22 @@ export function Chat() {
       setUserId(userId);
     } catch (error: AxiosError | unknown) {
         if(isAxiosError(error)) {
+          if(error.code === NETWORK_ERROR_CODE_MESSAGE) {
+            setCodeRed(true);
+            setErrorMessage(NETWORK_ERROR_MESSAGE);
+            throw new Error('error.code === "ERR_NETWORK" in createUser');
+          }
+
           const message = error.response?.data.detail;
 
           setCodeRed(true);
           setErrorMessage(message);
+          throw new Error(message);
         } else {
           console.error('An unknown error occurred: ', error);
-
-          const message = `An unknown error occurred while creating your user`;
-
           setCodeRed(true);
-          setErrorMessage(message);
+          setErrorMessage(USER_CREATE_UNKNOWN_ERROR_MESSAGE);
+          throw new Error(USER_CREATE_UNKNOWN_ERROR_MESSAGE);
         }
     }
   };
@@ -77,6 +89,12 @@ export function Chat() {
       setUserId(userId);
     } catch (error: AxiosError | unknown) {
         if (isAxiosError(error)) {
+          if(error.code === NETWORK_ERROR_CODE_MESSAGE) {
+            setCodeRed(true);
+            setErrorMessage(NETWORK_ERROR_MESSAGE);
+            throw new Error('error.code === "ERR_NETWORK" in getUserById');
+          }
+
           const status = error.response?.status;
           const message = error.response?.data.detail;
 
@@ -89,13 +107,13 @@ export function Chat() {
 
           setCodeRed(true);
           setErrorMessage(message);
+          throw new Error(message);
       } else {
           console.error('An unknown error occurred: ', error);
 
-          const message = `An unknown error occurred while fetching your user`;
-
           setCodeRed(true);
-          setErrorMessage(message);
+          setErrorMessage(USER_FETCH_UNKNOW_ERROR_MESSAGE);
+          throw new Error(USER_UNKNOWN_ERROR_MESSAGE);
       }
     }
   }, []);
@@ -118,6 +136,12 @@ export function Chat() {
 
     if(health.status === 200) console.log('All good with OpenAI api health: ', health);
 
+    if(health.error?.code === NETWORK_ERROR_CODE_MESSAGE) {
+      setCodeRed(true);
+      setErrorMessage(NETWORK_ERROR_MESSAGE);
+      throw new Error('error.code === "ERR_NETWORK" in getOpenAIStatus');
+    }
+
     if(health.status === 500 || health.status === 503) {
       setCodeRed(true);
       console.log('Something wrong with OpenAI API health: ', health);
@@ -125,6 +149,7 @@ export function Chat() {
       const message = health.status === 500 ? OPENAI_STATUS_500_ERROR_MESSAGE : health.status === 503 ? OPENAI_STATUS_503_ERROR_MESSAGE : null;
 
       setErrorMessage(message);
+      throw new Error(OPENAI_ERROR_MESSAGE);
     }
   }, []);
 
@@ -136,6 +161,7 @@ export function Chat() {
       setCodeRed(true);
       console.log('Something wrong with API health: ', health);
       setErrorMessage(API_STATUS_500_ERROR_MESSAGE);
+      throw new Error(API_ERROR_MESSAGE);
     }
   }, []);
 
@@ -199,7 +225,7 @@ export function Chat() {
 
   const componentDidMount = () => {
     if (!hasMounted.current) { // Checking if the component has not mounted
-      Promise.all([getOpenAIStatus(), getAPIStatus(), getUserByLocalStorageId()]);
+      Promise.all([getUserByLocalStorageId(), getOpenAIStatus(), getAPIStatus()]);
       hasMounted.current = true; // Updating the ref value after the initial mount
     }
   };
